@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace KritaBrushInfo {
 
@@ -23,14 +25,14 @@ namespace KritaBrushInfo {
             InitializeComponent();
         }
 
-        public void getInfo(String fileName) {
+        private void getInfo(String fileName) {
             if (fileName == null || fileName.Length == 0) {
                 return;
             }
             String output = "";
             curFileName = fileName;
             presetText = "";
-            textBoxInfo.Text ="processing " + fileName + " ...\n\n";
+            textBoxInfo.Text = "processing " + fileName + " ...\n\n";
             Process process = new Process();
             StringBuilder outputStringBuilder = new StringBuilder();
             bool success = false;
@@ -86,18 +88,71 @@ namespace KritaBrushInfo {
                 }
                 int len = output.Length;
                 presetText = output.Substring(start, end - start + 9);
-                textBoxInfo.AppendText(presetText);
+                processXml(presetText);
             } else {
                 textBoxInfo.AppendText("\nProcess failed\nThe output is:\n");
                 textBoxInfo.AppendText(output);
             }
         }
 
-        private void OnRefresh(object sender, EventArgs e) {
+        private void processXml1(String xmlString) {
+            if (presetText == null || presetText.Length == 0) {
+                textBoxInfo.AppendText("\nThe preset element is not defined");
+                return;
+            }
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlString);
+            XmlNodeList parentNode = xmlDoc.GetElementsByTagName("listS");
+            foreach (XmlNode childrenNode in parentNode) {
+                textBoxInfo.AppendText(childrenNode.SelectSingleNode("//field1").Value);
+            }
+        }
+
+        private void processXml2(String xmlString) {
+            if (presetText == null || presetText.Length == 0) {
+                textBoxInfo.AppendText("\nThe preset element is not defined");
+                return;
+            }
+
+            XDocument doc = XDocument.Parse(xmlString);
+            var col = from dummy in doc.DescendantNodes() select dummy;
+            foreach (var myvar in col) {
+                XNode node = (XNode)myvar;
+                if (node.NodeType == XmlNodeType.Text) {
+                    textBoxInfo.AppendText("Type = [" + node.NodeType + "] Value = " + node.ToString());
+                    textBoxInfo.AppendText(Environment.NewLine);
+                } else {
+                    //XElement xdoc = new XElement((node as XElement).Name, (node as XElement).Value);
+                    //textBoxInfo.AppendText("Type = [" + xdoc.NodeType + "] Name = " + xdoc.Name);
+                }
+            }
+        }
+
+        private void processXml(String xmlString) {
+            String nl = Environment.NewLine;
+            if (presetText == null || presetText.Length == 0) {
+                textBoxInfo.AppendText("\nThe preset element is not defined");
+                return;
+            }
+
+            XDocument doc = XDocument.Parse(xmlString);
+            StringBuilder info;
+            foreach (XElement element in doc.Descendants("param")) {
+                info = new StringBuilder();
+                info.Append(element.Attribute("name").Value);
+                info.Append(" [").Append(element.Attribute("type").Value).Append("]");
+                info.Append(nl);
+                info.Append("   ").Append(element.Value);
+                info.Append(nl);
+                textBoxInfo.AppendText(info.ToString());
+            }
+        }
+
+        private void OnProcessClick(object sender, EventArgs e) {
             getInfo(DEFAULT_FILE_NAME);
         }
 
-        private void OnQuit(object sender, EventArgs e) {
+        private void OnQuitCick(object sender, EventArgs e) {
             Close();
         }
     }

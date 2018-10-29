@@ -57,9 +57,9 @@
             this.flowLayoutPanelButtons.BackColor = System.Drawing.SystemColors.Control;
             this.flowLayoutPanelButtons.Controls.Add(this.buttonRefresh);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonQuit);
-            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(549, 1012);
+            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(547, 1012);
             this.flowLayoutPanelButtons.Name = "flowLayoutPanelButtons";
-            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(214, 48);
+            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(217, 48);
             this.flowLayoutPanelButtons.TabIndex = 0;
             this.flowLayoutPanelButtons.WrapContents = false;
             // 
@@ -70,24 +70,24 @@
             this.buttonRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.buttonRefresh.Location = new System.Drawing.Point(3, 3);
             this.buttonRefresh.Name = "buttonRefresh";
-            this.buttonRefresh.Size = new System.Drawing.Size(124, 42);
+            this.buttonRefresh.Size = new System.Drawing.Size(127, 42);
             this.buttonRefresh.TabIndex = 1;
-            this.buttonRefresh.Text = "Refresh";
+            this.buttonRefresh.Text = "Process";
             this.buttonRefresh.UseVisualStyleBackColor = true;
-            this.buttonRefresh.Click += new System.EventHandler(this.OnRefresh);
+            this.buttonRefresh.Click += new System.EventHandler(this.OnProcessClick);
             // 
             // buttonQuit
             // 
             this.buttonQuit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonQuit.AutoSize = true;
             this.buttonQuit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonQuit.Location = new System.Drawing.Point(133, 3);
+            this.buttonQuit.Location = new System.Drawing.Point(136, 3);
             this.buttonQuit.Name = "buttonQuit";
             this.buttonQuit.Size = new System.Drawing.Size(78, 42);
             this.buttonQuit.TabIndex = 0;
             this.buttonQuit.Text = "Quit";
             this.buttonQuit.UseVisualStyleBackColor = true;
-            this.buttonQuit.Click += new System.EventHandler(this.OnQuit);
+            this.buttonQuit.Click += new System.EventHandler(this.OnQuitCick);
             // 
             // textBoxInfo
             // 
