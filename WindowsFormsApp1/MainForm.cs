@@ -17,6 +17,7 @@ namespace KritaBrushInfo {
         public readonly String DEFAULT_FILE_NAME = @"C:\Users\evans\AppData\Roaming\krita\paintoppresets\DA_Oil_16_Rough_Blocking_Soft.kpp";
         public readonly String EXIFTOOL_NAME = @"C:\bin\EXIFTool\exiftool.exe";
         public readonly int PROCESS_TIMEOUT = 5000; // ms
+        public readonly String NL = Environment.NewLine;
 
         public String curFileName = "No file specified";
         public String presetText = "";
@@ -32,7 +33,7 @@ namespace KritaBrushInfo {
             String output = "";
             curFileName = fileName;
             presetText = "";
-            textBoxInfo.Text = "processing " + fileName + " ...\n\n";
+            textBoxInfo.Text = fileName + NL + NL;
             Process process = new Process();
             StringBuilder outputStringBuilder = new StringBuilder();
             bool success = false;
@@ -129,7 +130,6 @@ namespace KritaBrushInfo {
         }
 
         private void processXml(String xmlString) {
-            String nl = Environment.NewLine;
             if (presetText == null || presetText.Length == 0) {
                 textBoxInfo.AppendText("\nThe preset element is not defined");
                 return;
@@ -141,9 +141,9 @@ namespace KritaBrushInfo {
                 info = new StringBuilder();
                 info.Append(element.Attribute("name").Value);
                 info.Append(" [").Append(element.Attribute("type").Value).Append("]");
-                info.Append(nl);
+                info.Append(NL);
                 info.Append("   ").Append(element.Value);
-                info.Append(nl);
+                info.Append(NL);
                 textBoxInfo.AppendText(info.ToString());
             }
         }
