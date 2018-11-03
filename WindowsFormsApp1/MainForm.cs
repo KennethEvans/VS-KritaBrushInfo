@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +20,22 @@ namespace KritaBrushInfo {
         public readonly int PROCESS_TIMEOUT = 5000; // ms
         public readonly String NL = Environment.NewLine;
 
-        public String curFileName = "No file specified";
+        public String fileName1 = "";
+        public String fileName2 = "";
         public String presetText = "";
 
+        private List<KritaPresetParam> params1 = new List<KritaPresetParam>();
+        private List<KritaPresetParam> params2 = new List<KritaPresetParam>();
+        private List<KritaPresetParam> paramsCur;
+
         public MainForm() {
+            fileName1 = Properties.Settings.Default.FileName1;
+            fileName2 = Properties.Settings.Default.FileName2;
+
             InitializeComponent();
+
+            textBoxFile1.Text = fileName1;
+            textBoxFile2.Text = fileName2;
         }
 
         private void getInfo(String fileName) {
@@ -31,7 +43,6 @@ namespace KritaBrushInfo {
                 return;
             }
             String output = "";
-            curFileName = fileName;
             presetText = "";
             textBoxInfo.Text = fileName + NL + NL;
             Process process = new Process();
@@ -40,7 +51,7 @@ namespace KritaBrushInfo {
             try {
                 process.StartInfo.FileName = EXIFTOOL_NAME;
                 //process.StartInfo.WorkingDirectory = args.ExeDirectory;
-                process.StartInfo.Arguments = fileName;
+                process.StartInfo.Arguments = "\"" + fileName + "\"";
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -96,64 +107,124 @@ namespace KritaBrushInfo {
             }
         }
 
-        private void processXml1(String xmlString) {
-            if (presetText == null || presetText.Length == 0) {
-                textBoxInfo.AppendText("\nThe preset element is not defined");
-                return;
-            }
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(xmlString);
-            XmlNodeList parentNode = xmlDoc.GetElementsByTagName("listS");
-            foreach (XmlNode childrenNode in parentNode) {
-                textBoxInfo.AppendText(childrenNode.SelectSingleNode("//field1").Value);
-            }
-        }
-
-        private void processXml2(String xmlString) {
-            if (presetText == null || presetText.Length == 0) {
-                textBoxInfo.AppendText("\nThe preset element is not defined");
-                return;
-            }
-
-            XDocument doc = XDocument.Parse(xmlString);
-            var col = from dummy in doc.DescendantNodes() select dummy;
-            foreach (var myvar in col) {
-                XNode node = (XNode)myvar;
-                if (node.NodeType == XmlNodeType.Text) {
-                    textBoxInfo.AppendText("Type = [" + node.NodeType + "] Value = " + node.ToString());
-                    textBoxInfo.AppendText(Environment.NewLine);
-                } else {
-                    //XElement xdoc = new XElement((node as XElement).Name, (node as XElement).Value);
-                    //textBoxInfo.AppendText("Type = [" + xdoc.NodeType + "] Name = " + xdoc.Name);
-                }
-            }
-        }
-
         private void processXml(String xmlString) {
-            if (presetText == null || presetText.Length == 0) {
+            if (xmlString == null || xmlString.Length == 0) {
                 textBoxInfo.AppendText("\nThe preset element is not defined");
                 return;
             }
 
             XDocument doc = XDocument.Parse(xmlString);
             StringBuilder info;
+            KritaPresetParam param = null;
             foreach (XElement element in doc.Descendants("param")) {
-                info = new StringBuilder();
-                info.Append(element.Attribute("name").Value);
-                info.Append(" [").Append(element.Attribute("type").Value).Append("]");
-                info.Append(NL);
-                info.Append("   ").Append(element.Value);
-                info.Append(NL);
-                textBoxInfo.AppendText(info.ToString());
+                param = new KritaPresetParam(element);
+                paramsCur.Add(param);
+                if (!param.Err) {
+                    textBoxInfo.AppendText(param.info());
+                } else {
+                    textBoxInfo.AppendText(param.ErrorMessage);
+                }
+                //info = new StringBuilder();
+                //info.Append(element.Attribute("name").Value);
+                //info.Append(" [").Append(element.Attribute("type").Value).Append("]");
+                //info.Append(NL);
+                //info.Append("   ").Append(element.Value);
+                //info.Append(NL);
+                //textBoxInfo.AppendText(info.ToString());
             }
         }
 
-        private void OnProcessClick(object sender, EventArgs e) {
+        private void readFile(int n) {
+            if (n < 1 || n > 2) {
+                Utils.Utils.errMsg("Invalid File number: File " + n);
+                return;
+            }
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "Krita Presets|*.kpp";
+            dlg.Title = "Select a Preset File" + "(" + n + ")";
+            // Set initial directory
+            switch (n) {
+                case 1:
+                    if (File.Exists(fileName1)) {
+                        dlg.FileName = fileName1;
+                        dlg.InitialDirectory = Path.GetDirectoryName(fileName1);
+                    }
+                    break;
+                case 2:
+                    if (File.Exists(fileName2)) {
+                        dlg.FileName = fileName2;
+                        dlg.InitialDirectory = Path.GetDirectoryName(fileName2);
+                    }
+                    break;
+            }
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                switch (n) {
+                    case 1:
+                        fileName1 = dlg.FileName;
+                        break;
+                    case 2:
+                        fileName2 = dlg.FileName;
+                        break;
+                }
+                resetFilenames();
+            }
+
+        }
+
+        private void resetFilenames() {
+            textBoxFile1.Text = fileName1;
+            textBoxFile2.Text = fileName2;
+            Properties.Settings.Default.FileName1 = fileName1;
+            Properties.Settings.Default.FileName2 = fileName2;
+            Properties.Settings.Default.Save();
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e) {
+        }
+
+        private void OnProcess1Click(object sender, EventArgs e) {
+            if (fileName1 == null || fileName1.Length == 0) {
+                Utils.Utils.errMsg("File 1 is not defined");
+                return;
+            }
+            if (!File.Exists(fileName1)) {
+                Utils.Utils.errMsg(fileName1 + " does not exist");
+                return;
+            }
+            params1.Clear();
+            paramsCur = params1;
+            getInfo(fileName1);
+        }
+
+        private void OnProcess2Click(object sender, EventArgs e) {
+            if (fileName2 == null || fileName2.Length == 0) {
+                Utils.Utils.errMsg("File 2 is not defined");
+                return;
+            }
+            if (!File.Exists(fileName2)) {
+                Utils.Utils.errMsg(fileName2 + " does not exist");
+                return;
+            }
+            params1.Clear();
+            paramsCur = params1;
+            getInfo(fileName2);
+        }
+
+        private void OnCompareClick(object sender, EventArgs e) {
             getInfo(DEFAULT_FILE_NAME);
         }
 
         private void OnQuitCick(object sender, EventArgs e) {
             Close();
         }
+
+        private void OnBrowseFile1Click(object sender, EventArgs e) {
+            readFile(1);
+        }
+
+        private void OnBrowseFile2Click(object sender, EventArgs e) {
+            readFile(2);
+        }
+
     }
 }
