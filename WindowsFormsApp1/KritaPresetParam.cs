@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace KritaBrushInfo {
-    class KritaPresetParam {
+    class KritaPresetParam : IComparer {
         public readonly String NL = Environment.NewLine;
         private string name;
         private string type;
@@ -26,7 +27,7 @@ namespace KritaBrushInfo {
                 name = element.Attribute("name").Value.ToString();
                 type = element.Attribute("type").Value.ToString();
                 value = element.Value.ToString();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 err = true;
                 errorMessage = ex.Message;
                 return;
@@ -44,8 +45,32 @@ namespace KritaBrushInfo {
             return info.ToString();
         }
 
+        public bool equalsExceptType(KritaPresetParam param) {
+            if (this.name.Equals(param.name) && this.value.Equals(param.value)) {
+                return true;
+            }
+            return false;
+        }
+
+        public bool equals(KritaPresetParam param) {
+            if (this.name.Equals(param.name) && this.type.Equals(param.type)
+                && this.value.Equals(param.value)) {
+                return true;
+            }
+            return false;
+        }
+
+        public int Compare(KritaPresetParam x, KritaPresetParam y) {
+            return ((KritaPresetParam)x).name.CompareTo(((KritaPresetParam)y).name);
+        }
+
+        public int Compare(object x, object y) {
+            throw new NotImplementedException();
+        }
+
         public string Name { get => name; set => name = value; }
         public string Type { get => type; set => type = value; }
+        public string Value { get => value; set => this.value = value; }
         public bool Err { get => err; set => err = value; }
         public string ErrorMessage { get => errorMessage; set => errorMessage = value; }
     }

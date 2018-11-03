@@ -22,7 +22,6 @@ namespace KritaBrushInfo {
 
         public String fileName1 = "";
         public String fileName2 = "";
-        public String presetText = "";
 
         private List<KritaPresetParam> params1 = new List<KritaPresetParam>();
         private List<KritaPresetParam> params2 = new List<KritaPresetParam>();
@@ -38,13 +37,15 @@ namespace KritaBrushInfo {
             textBoxFile2.Text = fileName2;
         }
 
-        private void getInfo(String fileName) {
+        private void getInfo(String fileName, bool print) {
             if (fileName == null || fileName.Length == 0) {
                 return;
             }
             String output = "";
-            presetText = "";
-            textBoxInfo.Text = fileName + NL + NL;
+            string presetText = "";
+            if (print) {
+                textBoxInfo.Text = fileName + NL + NL;
+            }
             Process process = new Process();
             StringBuilder outputStringBuilder = new StringBuilder();
             bool success = false;
@@ -82,55 +83,145 @@ namespace KritaBrushInfo {
                     output = outputStringBuilder.ToString();
                 }
             } catch (Exception ex) {
-                textBoxInfo.AppendText("\nError running process: " + ex.Message);
+                if (print) {
+                    textBoxInfo.AppendText("\nError running process: " + ex.Message);
+                } else {
+                    Utils.Utils.excMsg("Error running process: ", ex);
+                }
             } finally {
                 process.Close();
             }
             if (success) {
                 if (output == null || output.Length == 0) {
-                    textBoxInfo.AppendText("No output produced");
+                    if (print) {
+                        textBoxInfo.AppendText("No output produced");
+                    } else {
+                        Utils.Utils.errMsg("No output produced");
+                    }
                     return;
                 }
                 // Find the preset
                 int start = output.IndexOf("<Preset ");
                 int end = output.LastIndexOf("</Preset>");
                 if (start == -1 || end == -1) {
-                    textBoxInfo.AppendText("Cannot find Preset element");
+                    if (print) {
+                        textBoxInfo.AppendText("Cannot find Preset element");
+                    }
                     return;
                 }
                 int len = output.Length;
                 presetText = output.Substring(start, end - start + 9);
-                processXml(presetText);
+                processXml(presetText, print);
             } else {
-                textBoxInfo.AppendText("\nProcess failed\nThe output is:\n");
-                textBoxInfo.AppendText(output);
+                if (print) {
+                    textBoxInfo.AppendText("\nProcess failed\nThe output is:\n");
+                    textBoxInfo.AppendText(output);
+                } else {
+                    Utils.Utils.errMsg("Process failed");
+                }
             }
         }
 
-        private void processXml(String xmlString) {
+        private void processXml(String xmlString, bool print) {
             if (xmlString == null || xmlString.Length == 0) {
-                textBoxInfo.AppendText("\nThe preset element is not defined");
+                if (print) {
+                    textBoxInfo.AppendText("\nThe preset element is not defined");
+                }
                 return;
             }
 
             XDocument doc = XDocument.Parse(xmlString);
-            StringBuilder info;
             KritaPresetParam param = null;
             foreach (XElement element in doc.Descendants("param")) {
                 param = new KritaPresetParam(element);
+                // Parse inside the param
+                processSubElements(param);
                 paramsCur.Add(param);
-                if (!param.Err) {
-                    textBoxInfo.AppendText(param.info());
-                } else {
-                    textBoxInfo.AppendText(param.ErrorMessage);
+                if (print) {
+                    if (!param.Err) {
+                        textBoxInfo.AppendText(param.info());
+                    } else {
+                        textBoxInfo.AppendText(param.ErrorMessage);
+                    }
                 }
-                //info = new StringBuilder();
-                //info.Append(element.Attribute("name").Value);
-                //info.Append(" [").Append(element.Attribute("type").Value).Append("]");
-                //info.Append(NL);
-                //info.Append("   ").Append(element.Value);
-                //info.Append(NL);
-                //textBoxInfo.AppendText(info.ToString());
+            }
+        }
+
+        private void processSubElements(KritaPresetParam param) {
+            string value = param.Value.Trim();
+            if(value == null || value.Length == 0) {
+                return;
+            }
+            if(value.StartsWith("<") && value.EndsWith(">")) {
+                XDocument doc = XDocument.Parse(value);
+            }
+        }
+
+        private void compare() {
+            // If not done get params for file 1
+            if (params1.Count == 0) {
+                paramsCur = params1;
+                getInfo(fileName1, false);
+            }
+            if (params1.Count == 0) {
+                Utils.Utils.errMsg("Did not get params for File 1");
+                return;
+            }
+            if (params2.Count == 0) {
+                paramsCur = params2;
+                getInfo(fileName2, false);
+            }
+            if (params2.Count == 0) {
+                Utils.Utils.errMsg("Did not get params for File 2");
+                return;
+            }
+            textBoxInfo.Text = "1: " + fileName1 + NL;
+            textBoxInfo.AppendText("2: " + fileName2 + NL + NL);
+
+            // Look for items in 2 that are in 1
+            bool found;
+            KritaPresetParam foundParam = null;
+            foreach (KritaPresetParam param1 in params1) {
+                found = false;
+                // Look for the same name
+                foreach (KritaPresetParam param2 in params2) {
+                    if (param1.Name.Equals(param2.Name)) {
+                        found = true;
+                        foundParam = param2;
+                        break;
+                    }
+                }
+                if (!found) {
+                    textBoxInfo.AppendText(param1.Name + NL);
+                    textBoxInfo.AppendText("   1: " + param1.Value + NL);
+                    textBoxInfo.AppendText("   2: Not found in 2" + NL);
+                    break;
+                }
+                if (found && !param1.equalsExceptType(foundParam)) {
+                    textBoxInfo.AppendText(param1.Name + NL);
+                    textBoxInfo.AppendText("   1: " + param1.Value + NL);
+                    textBoxInfo.AppendText("   2: " + foundParam.Value + NL);
+                }
+            }
+
+            // Look for items in 2 that are not in 1
+            textBoxInfo.AppendText(NL);
+            foreach (KritaPresetParam param2 in params2) {
+                found = false;
+                // Look for the same name
+                foreach (KritaPresetParam param1 in params1) {
+                    if (param1.Name.Equals(param2.Name)) {
+                        found = true;
+                        foundParam = param2;
+                        break;
+                    }
+                }
+                if (!found) {
+                    textBoxInfo.AppendText(param2.Name + NL);
+                    textBoxInfo.AppendText("   1: Not found in 1" + NL);
+                    textBoxInfo.AppendText("   2: " + param2.Value + NL);
+                    break;
+                }
             }
         }
 
@@ -193,7 +284,7 @@ namespace KritaBrushInfo {
             }
             params1.Clear();
             paramsCur = params1;
-            getInfo(fileName1);
+            getInfo(fileName1, true);
         }
 
         private void OnProcess2Click(object sender, EventArgs e) {
@@ -207,11 +298,11 @@ namespace KritaBrushInfo {
             }
             params1.Clear();
             paramsCur = params1;
-            getInfo(fileName2);
+            getInfo(fileName2, true);
         }
 
         private void OnCompareClick(object sender, EventArgs e) {
-            getInfo(DEFAULT_FILE_NAME);
+            compare();
         }
 
         private void OnQuitCick(object sender, EventArgs e) {
