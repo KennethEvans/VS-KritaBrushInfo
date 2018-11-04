@@ -1,4 +1,7 @@
-﻿using System;
+﻿#undef debugging
+#undef doSubElements
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -129,13 +133,15 @@ namespace KritaBrushInfo {
                 }
                 return;
             }
-
+#if debugging
+            // DEBUG
+            textBoxInfo.AppendText(xmlString + NL + NL);
+#endif
             XDocument doc = XDocument.Parse(xmlString);
             KritaPresetParam param = null;
             foreach (XElement element in doc.Descendants("param")) {
                 param = new KritaPresetParam(element);
                 // Parse inside the param
-                processSubElements(param);
                 paramsCur.Add(param);
                 if (print) {
                     if (!param.Err) {
@@ -144,17 +150,80 @@ namespace KritaBrushInfo {
                         textBoxInfo.AppendText(param.ErrorMessage);
                     }
                 }
+#if doSubElements
+                processSubElements(param);
+#endif
             }
         }
 
         private void processSubElements(KritaPresetParam param) {
             string value = param.Value.Trim();
-            if(value == null || value.Length == 0) {
+            if (value == null || value.Length == 0) {
                 return;
             }
-            if(value.StartsWith("<") && value.EndsWith(">")) {
-                XDocument doc = XDocument.Parse(value);
+            if (!value.StartsWith("<") || !value.EndsWith(">")) {
+                return;
             }
+            value = Regex.Replace(value, "\\<\\!DOCTYPE params\\>", "").Trim();
+            textBoxInfo.AppendText("************************************" + NL);
+            textBoxInfo.AppendText(parseXmlElement(value, 0));
+            textBoxInfo.AppendText("************************************" + NL);
+        }
+
+        private string parseXmlElement(String xmlString, int level) {
+            IEnumerable<XElement> elements;
+            IEnumerable<XAttribute> attributes;
+            string value = xmlString;
+            string value1 = null;
+            if (value == null || value.Length == 0) {
+                return "";
+            }
+            if (!value.StartsWith("<") || !value.EndsWith(">")) {
+                return "";
+            }
+            value = Regex.Replace(value, "\\<\\!DOCTYPE params\\>", "").Trim();
+
+            // Calculate the prefix for this level
+            StringBuilder info = new StringBuilder();
+            const string tab = "    ";
+            info.Append("***");
+            for (int i = 0; i < level; i++) {
+                info.Append(tab);
+            }
+            string prefix = info.ToString();
+
+            // Parse the elements
+            info.Clear();
+            XDocument doc = XDocument.Parse(value);
+            elements = doc.Elements();
+            string recursiveInfo;
+            info.Append(prefix + value + NL);
+
+            foreach (XElement element1 in elements) {
+                value1 = null;
+                //info.Append(prefix + element.Name + NL);
+                info.Append(prefix + tab + element1.Name + NL);
+                attributes = element1.Attributes();
+                foreach (XAttribute attribute in attributes) {
+                    info.Append(prefix + tab + tab + "A: " + attribute.Name + NL);
+                }
+                value1 = element1.Value.ToString();
+                //value1 = Regex.Replace(value1, "<!DOCTYPE params>", "").Trim();
+                if (value1 == null || value1.Length == 0) {
+                    info.Append(prefix + tab + tab + "V: " + value1 + NL);
+                    continue;
+                }
+                if (!value1.StartsWith("<") || !value1.EndsWith(">")) {
+                    info.Append(prefix + tab + tab + "V: " + value1 + NL);
+                    continue;
+                }
+                info.Append(prefix + tab + tab + "V: " + value1 + NL);
+                recursiveInfo = parseXmlElement(value1, level + 2);
+                if (recursiveInfo != null && recursiveInfo.Length > 0) {
+                    info.Append(recursiveInfo);
+                }
+            }
+            return info.ToString();
         }
 
         private void compare() {
