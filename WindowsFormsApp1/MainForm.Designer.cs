@@ -38,10 +38,13 @@
             this.buttonProcess2 = new System.Windows.Forms.Button();
             this.buttonCompare = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
+            this.flowLayoutReorderAttr = new System.Windows.Forms.FlowLayoutPanel();
+            this.checkBoxReorderAttr = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelFile1.SuspendLayout();
             this.tableLayoutPanelFile2.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
+            this.flowLayoutReorderAttr.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelTop
@@ -53,11 +56,13 @@
             this.tableLayoutPanelTop.Controls.Add(this.tableLayoutPanelFile1, 0, 0);
             this.tableLayoutPanelTop.Controls.Add(this.tableLayoutPanelFile2, 1, 0);
             this.tableLayoutPanelTop.Controls.Add(this.textBoxInfo, 3, 0);
-            this.tableLayoutPanelTop.Controls.Add(this.flowLayoutPanelButtons, 0, 3);
+            this.tableLayoutPanelTop.Controls.Add(this.flowLayoutPanelButtons, 4, 0);
+            this.tableLayoutPanelTop.Controls.Add(this.flowLayoutReorderAttr, 2, 0);
             this.tableLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelTop.Name = "tableLayoutPanelTop";
-            this.tableLayoutPanelTop.RowCount = 4;
+            this.tableLayoutPanelTop.RowCount = 5;
+            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -81,8 +86,9 @@
             this.tableLayoutPanelFile1.Name = "tableLayoutPanelFile1";
             this.tableLayoutPanelFile1.RowCount = 1;
             this.tableLayoutPanelFile1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelFile1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelFile1.Size = new System.Drawing.Size(1646, 48);
-            this.tableLayoutPanelFile1.TabIndex = 3;
+            this.tableLayoutPanelFile1.TabIndex = 2;
             // 
             // labelFile1
             // 
@@ -93,7 +99,7 @@
             this.labelFile1.Location = new System.Drawing.Point(3, 0);
             this.labelFile1.Name = "labelFile1";
             this.labelFile1.Size = new System.Drawing.Size(93, 48);
-            this.labelFile1.TabIndex = 0;
+            this.labelFile1.TabIndex = 1;
             this.labelFile1.Text = "File 1:";
             this.labelFile1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -103,7 +109,7 @@
             this.textBoxFile1.Location = new System.Drawing.Point(102, 3);
             this.textBoxFile1.Name = "textBoxFile1";
             this.textBoxFile1.Size = new System.Drawing.Size(1416, 38);
-            this.textBoxFile1.TabIndex = 2;
+            this.textBoxFile1.TabIndex = 0;
             // 
             // buttonBrowse1
             // 
@@ -134,10 +140,11 @@
             this.tableLayoutPanelFile2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelFile2.Location = new System.Drawing.Point(3, 57);
             this.tableLayoutPanelFile2.Name = "tableLayoutPanelFile2";
-            this.tableLayoutPanelFile2.RowCount = 1;
+            this.tableLayoutPanelFile2.RowCount = 2;
             this.tableLayoutPanelFile2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelFile2.Size = new System.Drawing.Size(1646, 48);
-            this.tableLayoutPanelFile2.TabIndex = 2;
+            this.tableLayoutPanelFile2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelFile2.Size = new System.Drawing.Size(1646, 68);
+            this.tableLayoutPanelFile2.TabIndex = 3;
             // 
             // labelFile2
             // 
@@ -158,7 +165,7 @@
             this.textBoxFile2.Location = new System.Drawing.Point(102, 3);
             this.textBoxFile2.Name = "textBoxFile2";
             this.textBoxFile2.Size = new System.Drawing.Size(1416, 38);
-            this.textBoxFile2.TabIndex = 3;
+            this.textBoxFile2.TabIndex = 0;
             // 
             // buttonBrowse2
             // 
@@ -169,7 +176,7 @@
             this.buttonBrowse2.Location = new System.Drawing.Point(1524, 3);
             this.buttonBrowse2.Name = "buttonBrowse2";
             this.buttonBrowse2.Size = new System.Drawing.Size(119, 42);
-            this.buttonBrowse2.TabIndex = 0;
+            this.buttonBrowse2.TabIndex = 1;
             this.buttonBrowse2.Text = "Browse";
             this.buttonBrowse2.UseVisualStyleBackColor = false;
             this.buttonBrowse2.Click += new System.EventHandler(this.OnBrowseFile2Click);
@@ -177,12 +184,12 @@
             // textBoxInfo
             // 
             this.textBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxInfo.Location = new System.Drawing.Point(3, 111);
+            this.textBoxInfo.Location = new System.Drawing.Point(3, 179);
             this.textBoxInfo.Multiline = true;
             this.textBoxInfo.Name = "textBoxInfo";
             this.textBoxInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxInfo.Size = new System.Drawing.Size(1646, 895);
-            this.textBoxInfo.TabIndex = 1;
+            this.textBoxInfo.Size = new System.Drawing.Size(1646, 827);
+            this.textBoxInfo.TabIndex = 0;
             // 
             // flowLayoutPanelButtons
             // 
@@ -194,9 +201,9 @@
             this.flowLayoutPanelButtons.Controls.Add(this.buttonProcess2);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonCompare);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonQuit);
-            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(554, 1012);
+            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(500, 1012);
             this.flowLayoutPanelButtons.Name = "flowLayoutPanelButtons";
-            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(543, 48);
+            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(651, 48);
             this.flowLayoutPanelButtons.TabIndex = 0;
             this.flowLayoutPanelButtons.WrapContents = false;
             // 
@@ -207,9 +214,9 @@
             this.buttonProcess1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.buttonProcess1.Location = new System.Drawing.Point(3, 3);
             this.buttonProcess1.Name = "buttonProcess1";
-            this.buttonProcess1.Size = new System.Drawing.Size(150, 42);
-            this.buttonProcess1.TabIndex = 1;
-            this.buttonProcess1.Text = "Process 1";
+            this.buttonProcess1.Size = new System.Drawing.Size(204, 42);
+            this.buttonProcess1.TabIndex = 0;
+            this.buttonProcess1.Text = "Process File 1";
             this.buttonProcess1.UseVisualStyleBackColor = true;
             this.buttonProcess1.Click += new System.EventHandler(this.OnProcess1Click);
             // 
@@ -218,11 +225,11 @@
             this.buttonProcess2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonProcess2.AutoSize = true;
             this.buttonProcess2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonProcess2.Location = new System.Drawing.Point(159, 3);
+            this.buttonProcess2.Location = new System.Drawing.Point(213, 3);
             this.buttonProcess2.Name = "buttonProcess2";
-            this.buttonProcess2.Size = new System.Drawing.Size(150, 42);
-            this.buttonProcess2.TabIndex = 2;
-            this.buttonProcess2.Text = "Process 2";
+            this.buttonProcess2.Size = new System.Drawing.Size(204, 42);
+            this.buttonProcess2.TabIndex = 1;
+            this.buttonProcess2.Text = "Process File 2";
             this.buttonProcess2.UseVisualStyleBackColor = true;
             this.buttonProcess2.Click += new System.EventHandler(this.OnProcess2Click);
             // 
@@ -231,10 +238,10 @@
             this.buttonCompare.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonCompare.AutoSize = true;
             this.buttonCompare.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonCompare.Location = new System.Drawing.Point(315, 3);
+            this.buttonCompare.Location = new System.Drawing.Point(423, 3);
             this.buttonCompare.Name = "buttonCompare";
             this.buttonCompare.Size = new System.Drawing.Size(141, 42);
-            this.buttonCompare.TabIndex = 3;
+            this.buttonCompare.TabIndex = 2;
             this.buttonCompare.Text = "Compare";
             this.buttonCompare.UseVisualStyleBackColor = true;
             this.buttonCompare.Click += new System.EventHandler(this.OnCompareClick);
@@ -244,13 +251,35 @@
             this.buttonQuit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonQuit.AutoSize = true;
             this.buttonQuit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonQuit.Location = new System.Drawing.Point(462, 3);
+            this.buttonQuit.Location = new System.Drawing.Point(570, 3);
             this.buttonQuit.Name = "buttonQuit";
             this.buttonQuit.Size = new System.Drawing.Size(78, 42);
-            this.buttonQuit.TabIndex = 0;
+            this.buttonQuit.TabIndex = 3;
             this.buttonQuit.Text = "Quit";
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.OnQuitCick);
+            // 
+            // flowLayoutReorderAttr
+            // 
+            this.flowLayoutReorderAttr.AutoSize = true;
+            this.flowLayoutReorderAttr.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutReorderAttr.Controls.Add(this.checkBoxReorderAttr);
+            this.flowLayoutReorderAttr.Location = new System.Drawing.Point(3, 131);
+            this.flowLayoutReorderAttr.Name = "flowLayoutReorderAttr";
+            this.flowLayoutReorderAttr.Size = new System.Drawing.Size(475, 42);
+            this.flowLayoutReorderAttr.TabIndex = 4;
+            // 
+            // checkBoxReorderAttr
+            // 
+            this.checkBoxReorderAttr.AutoSize = true;
+            this.checkBoxReorderAttr.Checked = true;
+            this.checkBoxReorderAttr.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxReorderAttr.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxReorderAttr.Name = "checkBoxReorderAttr";
+            this.checkBoxReorderAttr.Size = new System.Drawing.Size(469, 36);
+            this.checkBoxReorderAttr.TabIndex = 0;
+            this.checkBoxReorderAttr.Text = "Reorder Attributes Alphabetically";
+            this.checkBoxReorderAttr.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -269,6 +298,8 @@
             this.tableLayoutPanelFile2.PerformLayout();
             this.flowLayoutPanelButtons.ResumeLayout(false);
             this.flowLayoutPanelButtons.PerformLayout();
+            this.flowLayoutReorderAttr.ResumeLayout(false);
+            this.flowLayoutReorderAttr.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -291,6 +322,8 @@
         private System.Windows.Forms.Button buttonBrowse2;
         private System.Windows.Forms.Button buttonProcess2;
         private System.Windows.Forms.Button buttonCompare;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutReorderAttr;
+        private System.Windows.Forms.CheckBox checkBoxReorderAttr;
     }
 }
 

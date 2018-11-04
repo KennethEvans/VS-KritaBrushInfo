@@ -1,5 +1,4 @@
 ﻿//#define debugging
-#define doSubElements
 //#define replaceDoctype
 
 using System;
@@ -151,9 +150,7 @@ namespace KritaBrushInfo {
                         textBoxInfo.AppendText(param.ErrorMessage);
                     }
                 }
-#if doSubElements
                 processSubElements(param);
-#endif
             }
         }
 
@@ -197,7 +194,9 @@ namespace KritaBrushInfo {
                 newElement.Add(new XElement(element1));
             }
             // Replace the param.Value
-            param.Value = newElement.Value.ToString();
+            if (checkBoxReorderAttr.Checked) {
+                param.Value = newElement.Value.ToString();
+            }
         }
 
         /// <summary>
@@ -221,10 +220,9 @@ namespace KritaBrushInfo {
             StringBuilder info = new StringBuilder();
             string prefix = "*** ";
             string tab = "    ";
-
-            // Print information about the element
 #if debugging
-            info.Append(elementInfo(xmlString));
+           // Print information about the element
+           info.Append(elementInfo(xmlString));
 #endif
 
             // Parse the element
@@ -256,6 +254,13 @@ namespace KritaBrushInfo {
             return info.ToString();
         }
 
+        /// <summary>
+        /// Returns information about the element specified by the xmlString,
+        /// inclusinf elements, descendent, and attributes.
+        /// Use for debugging.
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
         private string elementInfo(string xmlString) {
             IEnumerable<XElement> elements;
             IEnumerable<XAttribute> attributes;
@@ -283,19 +288,17 @@ namespace KritaBrushInfo {
         }
 
         private void compare() {
-            // If not done get params for file 1
-            if (params1.Count == 0) {
-                paramsCur = params1;
-                getInfo(fileName1, false);
-            }
+            // Rerun getting params for both files
+            params1.Clear();
+            paramsCur = params1;
+            getInfo(fileName1, false);
             if (params1.Count == 0) {
                 Utils.Utils.errMsg("Did not get params for File 1");
                 return;
             }
-            if (params2.Count == 0) {
-                paramsCur = params2;
-                getInfo(fileName2, false);
-            }
+            params2.Clear();
+            paramsCur = params2;
+            getInfo(fileName2, false);
             if (params2.Count == 0) {
                 Utils.Utils.errMsg("Did not get params for File 2");
                 return;
