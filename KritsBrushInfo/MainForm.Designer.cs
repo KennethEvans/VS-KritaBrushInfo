@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelFile1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelFile1 = new System.Windows.Forms.Label();
@@ -86,7 +87,7 @@
             this.tableLayoutPanelFile1.Name = "tableLayoutPanelFile1";
             this.tableLayoutPanelFile1.RowCount = 1;
             this.tableLayoutPanelFile1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelFile1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelFile1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.tableLayoutPanelFile1.Size = new System.Drawing.Size(1646, 48);
             this.tableLayoutPanelFile1.TabIndex = 2;
             // 
@@ -287,6 +288,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1652, 1063);
             this.Controls.Add(this.tableLayoutPanelTop);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Krita Brush Info";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
