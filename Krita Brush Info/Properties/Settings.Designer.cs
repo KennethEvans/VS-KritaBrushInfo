@@ -46,5 +46,17 @@ namespace KritaBrushInfo.Properties {
                 this["FileName2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ExifToolExe {
+            get {
+                return ((string)(this["ExifToolExe"]));
+            }
+            set {
+                this["ExifToolExe"] = value;
+            }
+        }
     }
 }

@@ -3,17 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace KritaBrushInfo {
@@ -47,6 +42,17 @@ namespace KritaBrushInfo {
             if (fileName == null || fileName.Length == 0) {
                 return;
             }
+            // Check for ExifTool .exe
+            string exifToolExe = Properties.Settings.Default.ExifToolExe;
+            if (exifToolExe == null || exifToolExe.Length == 0) {
+                Utils.Utils.errMsg("ExifTool .exe is not specified");
+                return;
+            }
+            if (!File.Exists(exifToolExe)) {
+                Utils.Utils.errMsg("ExifTool (" + exifToolExe + ") does not exist");
+                return;
+            }
+
             String output = "";
             string presetText = "";
             if (print) {
@@ -56,7 +62,7 @@ namespace KritaBrushInfo {
             StringBuilder outputStringBuilder = new StringBuilder();
             bool success = false;
             try {
-                process.StartInfo.FileName = EXIFTOOL_NAME;
+                process.StartInfo.FileName = exifToolExe;
                 //process.StartInfo.WorkingDirectory = args.ExeDirectory;
                 process.StartInfo.Arguments = "\"" + fileName + "\"";
                 process.StartInfo.RedirectStandardError = true;
@@ -459,7 +465,7 @@ namespace KritaBrushInfo {
             }
         }
 
-         private void OnPreferencesClick(object sender, EventArgs e) {
+        private void OnPreferencesClick(object sender, EventArgs e) {
             // Create, show, or set visible the preferences dialog as appropriate
             if (preferencesDlg == null) {
                 preferencesDlg = new PreferencesDialog();

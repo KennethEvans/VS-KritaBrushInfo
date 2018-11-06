@@ -122,6 +122,7 @@
             this.buttonBrowseExifExe.TabIndex = 1;
             this.buttonBrowseExifExe.Text = "Browse";
             this.buttonBrowseExifExe.UseVisualStyleBackColor = false;
+            this.buttonBrowseExifExe.Click += new System.EventHandler(this.OnBrowseExifExeClick);
             // 
             // flowLayoutPanelButtons
             // 
