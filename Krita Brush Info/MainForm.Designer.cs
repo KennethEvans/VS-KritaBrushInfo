@@ -29,6 +29,9 @@
             this.tableLayoutPanelFile1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelFile1 = new System.Windows.Forms.Label();
             this.textBoxFile1 = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemOverview = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonBrowse1 = new System.Windows.Forms.Button();
             this.tableLayoutPanelFile2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelFile2 = new System.Windows.Forms.Label();
@@ -42,15 +45,12 @@
             this.buttonQuit = new System.Windows.Forms.Button();
             this.flowLayoutReorderAttr = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxReorderAttr = new System.Windows.Forms.CheckBox();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemOverview = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelFile1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.tableLayoutPanelFile2.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
             this.flowLayoutReorderAttr.SuspendLayout();
-            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelTop
@@ -117,6 +117,29 @@
             this.textBoxFile1.Name = "textBoxFile1";
             this.textBoxFile1.Size = new System.Drawing.Size(1416, 38);
             this.textBoxFile1.TabIndex = 0;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemOverview,
+            this.toolStripMenuItemAbout});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(219, 96);
+            // 
+            // toolStripMenuItemOverview
+            // 
+            this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
+            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemOverview.Text = "Overview";
+            this.toolStripMenuItemOverview.Click += new System.EventHandler(this.onOverviewClick);
+            // 
+            // toolStripMenuItemAbout
+            // 
+            this.toolStripMenuItemAbout.Name = "toolStripMenuItemAbout";
+            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemAbout.Text = "About";
+            this.toolStripMenuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
             // 
             // buttonBrowse1
             // 
@@ -289,29 +312,6 @@
             this.checkBoxReorderAttr.Text = "Reorder Attributes Alphabetically";
             this.checkBoxReorderAttr.UseVisualStyleBackColor = true;
             // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(40, 40);
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemOverview,
-            this.toolStripMenuItemAbout});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(219, 96);
-            // 
-            // toolStripMenuItemOverview
-            // 
-            this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
-            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(218, 46);
-            this.toolStripMenuItemOverview.Text = "Overview";
-            this.toolStripMenuItemOverview.Click += new System.EventHandler(this.onOverviewClick);
-            // 
-            // toolStripMenuItemAbout
-            // 
-            this.toolStripMenuItemAbout.Name = "toolStripMenuItemAbout";
-            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(218, 46);
-            this.toolStripMenuItemAbout.Text = "About";
-            this.toolStripMenuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -327,13 +327,13 @@
             this.tableLayoutPanelTop.PerformLayout();
             this.tableLayoutPanelFile1.ResumeLayout(false);
             this.tableLayoutPanelFile1.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.tableLayoutPanelFile2.ResumeLayout(false);
             this.tableLayoutPanelFile2.PerformLayout();
             this.flowLayoutPanelButtons.ResumeLayout(false);
             this.flowLayoutPanelButtons.PerformLayout();
             this.flowLayoutReorderAttr.ResumeLayout(false);
             this.flowLayoutReorderAttr.PerformLayout();
-            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

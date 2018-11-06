@@ -23,6 +23,7 @@ namespace KritaBrushInfo {
         public readonly String EXIFTOOL_NAME = @"C:\bin\EXIFTool\exiftool.exe";
         public readonly int PROCESS_TIMEOUT = 5000; // ms
         public readonly String NL = Environment.NewLine;
+        private static ScrolledHTMLDialog overviewDlg;
 
         public String fileName1 = "";
         public String fileName2 = "";
@@ -446,15 +447,15 @@ namespace KritaBrushInfo {
         }
 
         private void onOverviewClick(object sender, EventArgs e) {
-            //// Create, show, or set visible the overviewDialog as appropriate
-            //if (overviewDlg == null) {
-            //    ArtPadForm artPad = (ArtPadForm)FindForm().FindForm();
-            //    overviewDlg = new ScrolledHTMLDialog(
-            //        Utils.Utils.getDpiAdjustedSize(artPad, new Size(800, 600)));
-            //    overviewDlg.Show();
-            //} else {
-            //    overviewDlg.Visible = true;
-            //}
+            // Create, show, or set visible the overviewDialog as appropriate
+            if (overviewDlg == null) {
+                MainForm app = (MainForm)FindForm().FindForm();
+                overviewDlg = new ScrolledHTMLDialog(
+                    Utils.Utils.getDpiAdjustedSize(app, new Size(800, 600)));
+                overviewDlg.Show();
+            } else {
+                overviewDlg.Visible = true;
+            }
         }
 
         private void OnAboutClick(object sender, EventArgs e) {

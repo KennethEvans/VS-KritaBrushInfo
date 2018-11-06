@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link href="book.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>ArtPad</title>
+</head>
+<body>
+<h1 align="center"><strong><img src="ArtPad.256x256.png" alt="Logo" width="96" height="96" align="middle" />ArtPad Overview</strong></h1>
+<p align="left">ArtPad is primarily designed for graphics applications that can use a pen input. These include Photoshop, Painter, Manga Studio, Krita, Rebelle, and others. Computers such as the Surface Pro,  Surface Book, and Cintiq provide pressure-sensitive pens. The problem is that most of these applications rely on a large number of sometimes complicated keystroke sequences to do things in the application. These sequences are hard to enter with the pen.</p>
+<p align="left">ArtPad is a small keypad  that stays on top of your application and allows you to enter these sequences by tapping on one of its keys. The keys, the number of rows and columns, their size, their label, and what keystrokes they send are all configurable. It is like an on-screen keyboard except that it sends key sequences rather than a single key. It also has some additional options, such as running a command.</p>
+<p align="left">There is no menu bar in ArtPad to save space. The menu is a context menu and is obtained by right clicking one of the keys. </p>
+<p align="left">There is a <a href="#Troubleshooting">Troubleshooting</a> section at the bottom of the page. There are also <a href="#Acknowledgements">Acknowledgements</a>. </p>
+<h3 align="left">How it Works</h3>
+<p>ArtPad is registered as a TOPMOST window, so that it stays on top of most other windows. However, if there are other TOPMOST windows, there is no guarantee it will be on top of those.</p>
+<p>Making it TOPMOST works most of the time. However, at times it may not stay on top for reasons that may not be readily apparent. For ways to fix it see <a href="#Troubleshooting">Troubleshooting</a>. </p>
+<p>It keeps track of and stores the currently active (foreground) window. It checks for the active window every time the cursor enters one of the keys. (This does not make ArtPad the active window.) Thus, whenever you do an action in ArtPad, it should know the correct active window, the place where you want your ArtPad key sequences to go. When you click a key, it sends the KeySequence for that key to the window it has stored (unless the Type is COMMAND or UNUSED, where no KeySequence is sent).</p>
+<p>ArtPad is built for Any CPU&nbsp;<em>without</em>&nbsp;32-bit preferred. It thus runs as 64-bit on 64-bit systems and 32-bit on 32-bit systems.</p>
+<p>ArtPad will remember its last location on the screen and its last loaded configuration file. It will use these values the next time it starts. If you have changed the configuration, perhaps by resizing, it will not remember those changes, unless they are explicitly saved. Save the configuration if you want to keep it.</p>
+<p>The configuration file has the key definitions, the size of the keypad, the number of rows and columns, the font parameters, and the foreground and background colors. It is a text file and can be edited manually if you are careful. The syntax is JSON. </p>
+<h3>Installation</h3>
+<p>If you are installing from a download, just unzip the files into a directory somewhere convenient. Then run it from there. If you are installing from a build, copy these files and directories from the bin/Release directory to a convenient directory..</p>
+<ul>
+  <li>ArtPad.exe</li>
+  <li>Newtonsoft.Json.dll</li>
+  <li>WindowsInput.dll</li>
+  <li>Help</li>
+</ul>
+<p>To uninstall, just delete these files. </p>
+<p>It is suggested you make an ArtPad directory in My Documents to keep configuration files. </p>
+<h3>Keys</h3>
+<p align="left">ArtPad comes  with a default keys configuration. You can change the keys directly in the interface, or you can also save the configuration as a file, and edit the file. You can load a saved configuration file. The file is in JSON syntax, but it can be intuitively edited in a text editor without really needing to understand JSON. Configuration files have the extension .config. This is an example key configuration that sends Ctrl-C: </p>
+<pre> {
+   &quot;Name&quot;: &quot;Copy&quot;,
+   &quot;KeyString&quot;: &quot;^c&quot;,
+   &quot;Type&quot;: 0,
+   &quot;Row&quot;: 1,
+   &quot;Col&quot;: 1,
+   &quot;Pressed&quot;: false
+ },
+</pre>
+<p>A key has five properties:</p>
+<ol>
+  <li>Name: The label that shows on the key.</li>
+  <li>KeyString: The keystroke sequence that is sent.</li>
+  <li>Type: There are four types, NORMAL (0), HOLD (1), COMMAND (2), and UNUSED (3).</li>
+  <li>Row: The row on the keypad, 0, 1, 2, ....</li>
+  <li>Col: The column on the keypad, 0, 1, 2, ....</li>
+  <li>Pressed: Whether the key is pressed or not (should always be left at false when editing and saving).</li>
+</ol>
+<p>The Name, Row, and Col should be self-explanatory. The type is the most complicated and is discussed below. Pressed only applies if the Type is HOLD and is discussed under the HOLD type. </p>
+<h3>KeyString</h3>
+<p>ArtPad uses SendKeys from the .Net Framework.  Each sequence is represented by one or more characters. To send a single character (except for special characters) just enter the character. For the special characters +, ^, %, and ~, use {+}, { ^}, {%}, and {~}. For the special characters (, ), {, }, [, and ] enclose them in braces. </p>
+<p>Here are some of the more commonly-used  keys that are special or are not characters:</p>
+<table width="50%" border="0">
+  <tr>
+    <td><strong>Key</strong></td>
+    <td><strong>Code</strong></td>
+  </tr>
+  <tr>
+    <td>^</td>
+    <td>Ctrl</td>
+  </tr>
+  <tr>
+    <td>+</td>
+    <td>Shift</td>
+  </tr>
+  <tr>
+    <td>%</td>
+    <td>Alt</td>
+  </tr>
+  <tr>
+    <td>~</td>
+    <td>Enter</td>
+  </tr>
+  <tr>
+    <td>{</td>
+    <td> {{
+      } (Similar for }) </td>
+  </tr>
+  <tr>
+    <td>(</td>
+    <td>{(} (Similar for )) </td>
+  </tr>
+  <tr>
+    <td>INS or INSERT</td>
+    <td>{INSERT} or {INS}</td>
+  </tr>
+  <tr>
+    <td>DEL or DELETE</td>
+    <td>{DELETE} or {DEL}</td>
+  </tr>
+  <tr>
+    <td>BACKSPACE</td>
+    <td>{BS} or {BKSP} or {BACKSPACE}</td>
+  </tr>
+  <tr>
+    <td>DOWN ARROW</td>
+    <td>{DOWN} (Similar for UP, LEFT, RIGHT)</td>
+  </tr>
+  <tr>
+    <td>END</td>
+    <td>{END} (Similar for HOME) </td>
+  </tr>
+  <tr>
+    <td>ESC</td>
+    <td>{ESC}</td>
+  </tr>
+  <tr>
+    <td>TAB</td>
+    <td>{TAB}</td>
+  </tr>
+  <tr>
+    <td>F1</td>
+    <td>{F1} (Similar for other function keys) </td>
+  </tr>
+  <tr>
+    <td>Keypad add</td>
+    <td>{ADD} (Similar for subtract, multiply, divide) </td>
+  </tr>
+  <tr>
+    <td>PAGE DOWN</td>
+    <td>{PGDN} (Similar for PAGE UP) </td>
+  </tr>
+  <tr>
+    <td>NUMLOCK</td>
+    <td>{NUMLOCK}</td>
+  </tr>
+</table>
+<p>Here are some examples:</p>
+<table width="40%" border="0">
+  <tr>
+    <td>Ctrl-C</td>
+    <td>^c</td>
+  </tr>
+  <tr>
+    <td>Alt-C</td>
+    <td>%c</td>
+  </tr>
+  <tr>
+    <td>Shift-Ctrl-S</td>
+    <td>^S</td>
+  </tr>
+  <tr>
+    <td>Ctrl-E, Ctrl-C </td>
+    <td>^(ec) or ^e^c </td>
+  </tr>
+  <tr>
+    <td>Shift-E, Shift-C </td>
+    <td>EC or +(EC) or +E+C or +e+c </td>
+  </tr>
+  <tr>
+    <td>Shift-E, C </td>
+    <td>+EC</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>A or +a or +A</td>
+  </tr>
+  <tr>
+    <td>Press h 10 times </td>
+    <td>{h 10} </td>
+  </tr>
+  <tr>
+    <td>Press LEFT ARROW 5 times </td>
+    <td>{LEFT 5} </td>
+  </tr>
+  <tr>
+    <td>Lorem Ipsum 2</td>
+    <td>Lorem Ipsum 2</td>
+  </tr>
+</table>
+<p>For a complete list of the syntax see <a href="https://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.send(v=vs.110).aspx">https://msdn.microsoft.com/en-us/library/system.windows.forms.sendkeys.send(v=vs.110).aspx</a> or search for SendKeys. </p>
+<h3>TYPE</h3>
+<p><strong>NORMAL</strong></p>
+<p>This indicates that the key sends a normal key sequence with the KeyString as described above. </p>
+<p><strong>HOLD</strong></p>
+<p>This indicates that the key should be held down after it is sent. The KeyString must be one of ^, +, %. It is used to perform the same way as the Ctrl, Shift, and Alt keys on the keyboard. For example, the sequence ^c with HOLD means the Ctrl key will stay down as if you pressed and held it. When a key is in the held state, it will be highlighted. All further keys sent from ArtPad or typed at the keyboard will be with that that key, e.g.Ctrl, held down. </p>
+<p>Note that if a key such as Ctrl is left held down when the active application changes, it will likely cause trouble with the next application or the desktop. For this reason there is a menu item to &quot;Send Hold Keys Up&quot;. This should fix the problem, even if ArtPad must be restarted to do it. It may also work to press the physical key on the keyboard twice or to press both physical keys on the keyboard together. In the worst case, you many have to log off and back on or restart. Being careful about leaving keys held down is the best approach. See <a href="#Troubleshooting">Troubleshooting.</a></p>
+<p><strong>COMMAND</strong></p>
+<p>This indicates that instead of sending keys, a command is run. The KeyString is the path to the command. If the command is in your PATH, then entering the name of the command is sufficient. Otherwise the full path must be specified. Typically, you can use in ArtPad whatever you can use at a command prompt.</p>
+<p>You can optionally type a comma after the command followed by options for the command.</p>
+<p>When editing in ArtPad itself, use a single backslash \ for the directory separator. In the JSON configuration file, you will have to use a double backslash \\.</p>
+<p>Note that you can call another instance of ArtPad. For example:</p>
+<pre>\bin\artpad.exe,\MyArtPadDir\Photoshop.config </pre>
+<p>will open another instance of ArtPad when the ArtPad executable is in \bin and your ArtPad configuration file for Photoshop is in \MyArtPadDir.</p>
+<p>You could also use C:\bin instead of \bin if bin is on your C drive. Again, you should be able to use whatever you can use at a command prompt (except for the comma notation). </p>
+<p><em>Onscreen Keyboards</em></p>
+<p>There are two onscreen keyboards you may want to consider.</p>
+<p>TabTip is the tablet keypad. In some applications it will come up automatically when you need to enter text, such as a file name for saving. Other applications don't support this feature, so you need a keypad. You can start TabTip with the following:</p>
+<pre>\Program Files\Common Files\Microsoft Shared\ink\TabTip.exe
+</pre>
+<p>OSK is another onscreen keyboard that has come with Windows for some time. On 64-bit Windows 10, you should be able to use:</p>
+<pre>\windows\system32\osk.exe</pre>
+<p>Whether you can use just osk.exe and whether it works at all depends on the version of Windows and on whether it is a 64-bit or 32-bit platform. You may have to experiment. Note that ArtPad runs as 64-bit on 64-bit systems and 32-bit on 32-bit systems. </p>
+<p><strong>UNUSED</strong></p>
+<p>This indicates you don't want to use this key for now. There will be no label, and the configuration will be retained but ignored. </p>
+<h3>Menus</h3>
+<p>There are no menus below the title bar as is usual for most applications, This is in order to save space. There is only a context menu, accessed by right-clicking any key. Use the X on the title bar to close ArtPad.</p>
+<p>The menu structure is:</p>
+<ul>
+  <li><a href="#EditKey">Edit Key...</a></li>
+  <li><a href="#CopyKey">Copy Key</a></li>
+  <li><a href="#PasteKey">Paste Key</a></li>
+  <li><a href="#EditKeyConfiguration">Edit Key Configuration...</a></li>
+  <ul>
+    <li><a href="#DeleteRow">Delete Row</a></li>
+    <li><a href="#AddRowBefore">Add Row Before</a> </li>
+    <li><a href="#AddRowAfter">Add Row After</a> </li>
+    <li><a href="#DeleteCol">Delete Column</a> </li>
+    <li><a href="#AddColBefore">Add Column Before</a> </li>
+    <li><a href="#AddColAfter">Add Column After</a> </li>
+    <li><a href="#Appearance">Appearance...</a></li>
+    <li><a href="#Sort">Sort</a></li>
+    <li><a href="#CreateNewConfig">Create New Configuration...</a></li>
+  </ul>
+  <li><a href="#TroubleshootingMenu">Troubleshooting</a></li>
+  <ul>
+    <li><a href="#ShowForegroundWindow">Show Foreground Window...</a></li>
+    <li><a href="#SendHoldKeysUp">Send Hold Keys Up</a> </li>
+    <li><a href="#ResetArtPadTopmost">Reset ArtPad as Topmost</a> </li>
+    <li><a href="#SetApplicationNotTopmost">Set Application Not Topmost</a> </li>
+    <li><a href="#SetApplicationTopmost">Set Application Topmost</a> </li>
+  </ul>
+  <li><a href="#LoadConfig">Load Configuration...</a></li>
+  <li><a href="#SaveConfigAs">Save Configuration As..</a></li>
+  <li><a href="#Help">Help</a></li>
+  <ul>
+    <li><a href="#HelpOverview">Overview</a></li>
+    <li><a href="#HelpAbout">About</a> </li>
+  </ul>
+  </li>
+</ul>
+<p><strong><a name="EditKey" id="EditKey"></a>Edit Key...</strong></p>
+<p>Brings up a dialog to edit the parameters for selected key. The dialog has buttons to Copy, Paste, Reset. Set the key, or Dismiss the dialog. The Edit Key Dialog will stay up after setting the key. You can load another key in it by selecting Edit Key... from that key. </p>
+<p><strong><a name="CopyKey" id="CopyKey"></a>Copy Key</strong></p>
+<p>Copies the current key to the clipboard as text, using JSON syntax. It can be copied into a text file, and it is available for the Paste Key menu option in ArtPad. </p>
+<p><strong><a name="PasteKey" id="PasteKey"></a>Paste Key</strong></p>
+<p>If the clipboard has a valid key definition, it pastes that definition into the selected key. </p>
+<p><strong><a name="EditKeyConfiguration" id="EditKeyConfiguration"></a>EDIT KEY CONFIGURATION </strong></p>
+<p><strong><a name="DeleteRow" id="DeleteRow"></a>Delete Row</strong></p>
+<p>Deletes the row containing the selected key.</p>
+<p><strong><a name="AddRowBefore" id="AddRowBefore"></a>Add Row Before </strong></p>
+<p>Adds a row before the row of the selected key. </p>
+<p><strong><a name="AddRowAfter" id="AddRowAfter"></a>Add Row After</strong></p>
+<p>Adds a row after the row of the selected key. </p>
+<p><strong><a name="DeleteCol" id="DeleteCol"></a>Delete Column</strong></p>
+<p>Deletes the column containing the selected key. </p>
+<p><strong><a name="AddColBefore" id="AddColBefore"></a>Add Column Before</strong></p>
+<p>Adds a column before the column of the selected key. </p>
+<p><strong><a name="AddColAfter" id="AddColAfter"></a>Add Column After</strong></p>
+<p>Adds a column before the column of the selected key.</p>
+<p><strong><a name="Appearance" id="Appearance"></a>Appearance...</strong></p>
+<p>The Appearance dialog allows you set the font, foreground and background colors, and the key size.</p>
+<p>You can specify the font name. There current name should be shown initially. Blank means to use the default font. There is a drop-down menu that list all the fonts on your system. Typing the first few characters of the name will position it near the name you are starting to type.</p>
+<p>You can check if you want Bold, Italic, Underlined, or Strikeout. The current values will be checked initially. </p>
+<p>You can specify the font size in points.  The current size should be shown initially. The value 0.0 means to use the default size.</p>
+<p>You can choose a foreground and a background color. Colors are specified in the form #RRGGBB, R, G, and B are valid hexadecimal digits (0-9 and A-F). This is a common notation for HTML. Red is #FF0000, Green is #00FF00, Blue is #0000FF, White is #FFFFFF, and Black is #000000. Use the Select button to select a color if you are unfamiliar with hexadecimal or just want to see the colors. As usual, the initial values are the current colors, and if the value is blank, then the default colors will be used.</p>
+<p>You can  set the width and height of the keys in the layout. (All keys are currently the same size.) It is initially filled in with the current values. What is actually used and saved in the configuration is the size of the box holding the keys. The width is the key width times the number of columns, and the height is the key height times the number of rows. It will readjust your values so that no labels are cut off and to meet any system requirements, like the minimum size for the title bar. Note that these values are in pixels and are dependent on your screen resolution. To get the same visual size on another computer, they may be different. Note that you can probably more easily resize the keys by dragging the resize handles on ArtPad. </p>
+<p><strong><a name="Sort" id="Sort"></a>Sort</strong></p>
+<p>This just sorts the configuration files so the keys are in order. It is useful if you plan to edit the configuration file manually. It does not affect the key layout. </p>
+<p><strong><a name="CreateNewConfig" id="CreateNewConfig"></a>Create New Configuration...</strong></p>
+<p>Allows you to specify the number of rows and columns for an entirely new configuration and, on confirmation, replaces the current configuration with the new blank one (all keys are UNUSED).</p>
+<p><strong><a name="TroubleshootingMenu" id="TroubleshootingMenu"></a>TROUBLESHOOTING</strong></p>
+<p><strong><a name="ShowForegroundWindow" id="ShowForegroundWindow"></a>Show Foreground Window...</strong></p>
+<p>Brings up a dialog with information about the ArtPad window and the foreground window (which may be ArtPad). In addition to showing which window is the window to which ArtPad is sending key sequences, it also shows the topmost state of both. This may be useful in determining why ArtPad is not on top of the application to which you want to be sending key sequences. See the <a href="#Troubleshooting">Troubleshooting</a> section.</p>
+<p><strong><a name="SendHoldKeysUp" id="SendHoldKeysUp"></a>Send Hold Keys Up</strong></p>
+<p>Sends an UP event for all keys with Type HOLD and keys the keys to not be highlighted. Use this to recover from problems caused by a held key, especially when the current application is changed while the keys are in the hold state. See the <a href="#Troubleshooting">Troubleshooting</a> section.</p>
+<p><strong><a name="ResetArtPadTopmost" id="ResetArtPadTopmost"></a>Reset ArtPad as Topmost</strong></p>
+<p>Resets ArtPad as a topmost window in case it has become unset somehow. See the <a href="#Troubleshooting">Troubleshooting</a> section. </p>
+<p><strong><a name="SetApplicationNotTopmost" id="SetApplicationNotTopmost"></a>Set Application Not Topmost</strong></p>
+<p>Sets the foreground window (the one to which ArtPad is sending key sequences) to not be topmost. Use this if the application is appearing on top of ArtPad.  See the <a href="#Troubleshooting">Troubleshooting</a> section. It will be necessary to insure the application is not maximized nor under or above Artpad when you do this. </p>
+<p><strong><a name="SetApplicationTopmost" id="SetApplicationTopmost"></a>Set Application Topmost</strong></p>
+<p>Sets the foreground window (the one to which ArtPad is sending keys) to be topmost. You do not want this to be the case, or ArtPad will appear under the application.  Use it to recover if you accidentally set the wrong window to be topmost.  Or it can be used to set any window to be topmost.    See the <a href="#Troubleshooting">Troubleshooting</a> section. </p>
+<p><strong></strong><strong><a name="LoadConfig" id="LoadConfig"></a>Load Configuration...</strong></p>
+<p>Load a new configuration file and reset the configuration. </p>
+<p><strong><a name="SaveConfigAs" id="SaveConfigAs"></a>Save Configuration As..</strong></p>
+<p>Save the current configuration in a file. The file is in JSON syntax, as described above, but it should not be hard to figure out how to change it. Note that the Types will be given in numbers, not text, and all backslashes in paths must be replaced with double backslashes.</p>
+<p><strong><a name="Help" id="Help"></a>HELP</strong></p>
+<p><strong><a name="HelpOverview" id="HelpOverview"></a>Help Overview...</strong></p>
+<p>Shows this  overview . </p>
+<p><strong><a name="HelpAbout" id="HelpAbout"></a>Help About... </strong></p>
+<p>Shows information about this application. </p>
+<h3><a name="Acknowledgements" id="Acknowledgements"></a>Acknowledgements</h3>
+<p>ArtPad uses the packages <a href="http://www.newtonsoft.com/json">Json.net</a> and <a href="https://inputsimulator.codeplex.com/">Windows Input Simulator</a>. </p>
+<h3><a name="Troubleshooting" id="Troubleshooting"></a>Troubleshooting</h3>
+<p><strong>I can't move ArtPad because the title bar is too small to find a place to drag.</strong></p>
+<p>Click the icon on the title bar, and use Move from the resulting menu.  You can use the keyboard or the mouse (provided you start where the double-arrow move cursor first appears). Alternative ways to get the Move menu item are to Shift-right-click the Task Bar icon, or use Alt-space when ArtPad is the active window. If you want to be able to move it easily, leave it large enough that there is space on the title bar to drag it. </p>
+<p><strong>I am getting all kinds of strange behavior in applications after using ArtPad</strong>.</p>
+<p>This can happen if the  keys  Ctrl, Alt, or Shift are left in the hold state or were put in the hold state when the wrong application was the active window. Actions in other programs or even the desktop behave as if these keys are held, which usually means they do something different than without them held. If ArtPad has been closed, restart it. Use the <a href="#SendHoldKeysUp">Send Hold Keys Up</a> menu item with the misbehaving application as the active window. It may also work to press the physical key on the keyboard twice or to press both physical keys on the keyboard together. In the worst case, you many have to log off and back on or restart. Being careful about holding keys down is the best approach.</p>
+<p>Note that ArtPad automatically does Send Hold Keys Up on exit. Thus, provided you have not switched active windows, there not be a problem if you forget. The problem occurs if the active window changes when the keys are held. </p>
+<p><strong>ArtPad is not staying on top.</strong></p>
+<p>ArtPad is registered as a TOPMOST window. That means it should be on top of normal windows, like your drawing application. However, there is no guarantee it will be on top of other TOPMOST windows. If ArtPad is not staying on top for whatever reason,  there are several things you can try.</p>
+<p>First use <a href="#ShowForegroundWindow">Troubleshooting | Show Foreground Window</a>. This will tell you which is the foreground window (the one to which ArtPad is sending key sequences), and it will tell you the topmost state of both ArtPad and the foreground window. You want ArtPad to be a topmost window and the foreground application to not be. Otherwise the application will be on top of ArtPad when it has focus. If this is not the case, you can use the <a href="#ResetArtPadTopmost">Troubleshooting | Reset ArtPad as Topmost</a> or <a href="#SetApplicationNotTopmost">Troubleshooting | Set Application Not Topmost</a> menu items to fix it. Although not strictly needed, <a href="#SetApplicationTopmost">Troubleshooting | Set Application Topmost</a> is provided to set a window to be topmost in case you accidentally set the wrong one. It can also be used to make any window topmost. This may be useful, say, for an image viewer you want to stay on top for use as a reference image while drawing.</p>
+<p>If these methods fail, the best solution is probably to close and restart ArtPad and/or the other application. Save your current ArtPad configuration first, if it has changed and you are interested in retaining it, and of course save your work in the other application before closing it. </p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>
