@@ -445,5 +445,21 @@ namespace KritaBrushInfo {
             readFile(2);
         }
 
+        private void onOverviewClick(object sender, EventArgs e) {
+            //// Create, show, or set visible the overviewDialog as appropriate
+            //if (overviewDlg == null) {
+            //    ArtPadForm artPad = (ArtPadForm)FindForm().FindForm();
+            //    overviewDlg = new ScrolledHTMLDialog(
+            //        Utils.Utils.getDpiAdjustedSize(artPad, new Size(800, 600)));
+            //    overviewDlg.Show();
+            //} else {
+            //    overviewDlg.Visible = true;
+            //}
+        }
+
+        private void OnAboutClick(object sender, EventArgs e) {
+            AboutBox dlg = new AboutBox();
+            dlg.ShowDialog();
+        }
     }
 }

@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelFile1 = new System.Windows.Forms.TableLayoutPanel();
@@ -41,11 +42,15 @@
             this.buttonQuit = new System.Windows.Forms.Button();
             this.flowLayoutReorderAttr = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxReorderAttr = new System.Windows.Forms.CheckBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemOverview = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelFile1.SuspendLayout();
             this.tableLayoutPanelFile2.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
             this.flowLayoutReorderAttr.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanelTop
@@ -106,6 +111,7 @@
             // 
             // textBoxFile1
             // 
+            this.textBoxFile1.ContextMenuStrip = this.contextMenuStrip;
             this.textBoxFile1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxFile1.Location = new System.Drawing.Point(102, 3);
             this.textBoxFile1.Name = "textBoxFile1";
@@ -184,6 +190,7 @@
             // 
             // textBoxInfo
             // 
+            this.textBoxInfo.ContextMenuStrip = this.contextMenuStrip;
             this.textBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxInfo.Location = new System.Drawing.Point(3, 179);
             this.textBoxInfo.Multiline = true;
@@ -282,11 +289,35 @@
             this.checkBoxReorderAttr.Text = "Reorder Attributes Alphabetically";
             this.checkBoxReorderAttr.UseVisualStyleBackColor = true;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemOverview,
+            this.toolStripMenuItemAbout});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(219, 96);
+            // 
+            // toolStripMenuItemOverview
+            // 
+            this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
+            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemOverview.Text = "Overview";
+            this.toolStripMenuItemOverview.Click += new System.EventHandler(this.onOverviewClick);
+            // 
+            // toolStripMenuItemAbout
+            // 
+            this.toolStripMenuItemAbout.Name = "toolStripMenuItemAbout";
+            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemAbout.Text = "About";
+            this.toolStripMenuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1652, 1063);
+            this.ContextMenuStrip = this.contextMenuStrip;
             this.Controls.Add(this.tableLayoutPanelTop);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
@@ -302,6 +333,7 @@
             this.flowLayoutPanelButtons.PerformLayout();
             this.flowLayoutReorderAttr.ResumeLayout(false);
             this.flowLayoutReorderAttr.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,6 +358,9 @@
         private System.Windows.Forms.Button buttonCompare;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutReorderAttr;
         private System.Windows.Forms.CheckBox checkBoxReorderAttr;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOverview;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAbout;
     }
 }
 
