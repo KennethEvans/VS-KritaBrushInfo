@@ -24,6 +24,7 @@ namespace KritaBrushInfo {
         public readonly int PROCESS_TIMEOUT = 5000; // ms
         public readonly String NL = Environment.NewLine;
         private static ScrolledHTMLDialog overviewDlg;
+        private static PreferencesDialog preferencesDlg;
 
         public String fileName1 = "";
         public String fileName2 = "";
@@ -447,7 +448,7 @@ namespace KritaBrushInfo {
         }
 
         private void onOverviewClick(object sender, EventArgs e) {
-            // Create, show, or set visible the overviewDialog as appropriate
+            // Create, show, or set visible the overview dialog as appropriate
             if (overviewDlg == null) {
                 MainForm app = (MainForm)FindForm().FindForm();
                 overviewDlg = new ScrolledHTMLDialog(
@@ -458,9 +459,21 @@ namespace KritaBrushInfo {
             }
         }
 
+         private void OnPreferencesClick(object sender, EventArgs e) {
+            // Create, show, or set visible the preferences dialog as appropriate
+            if (preferencesDlg == null) {
+                preferencesDlg = new PreferencesDialog();
+                preferencesDlg.Show();
+            } else {
+                preferencesDlg.Visible = true;
+            }
+
+        }
+
         private void OnAboutClick(object sender, EventArgs e) {
             AboutBox dlg = new AboutBox();
             dlg.ShowDialog();
         }
+
     }
 }

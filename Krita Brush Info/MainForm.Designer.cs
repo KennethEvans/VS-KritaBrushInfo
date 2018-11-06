@@ -45,6 +45,8 @@
             this.buttonQuit = new System.Windows.Forms.Button();
             this.flowLayoutReorderAttr = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxReorderAttr = new System.Windows.Forms.CheckBox();
+            this.toolStripMenuItemPreferences = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelFile1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -123,21 +125,23 @@
             this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemOverview,
+            this.toolStripMenuItemPreferences,
+            this.toolStripSeparator1,
             this.toolStripMenuItemAbout});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(219, 96);
+            this.contextMenuStrip.Size = new System.Drawing.Size(361, 203);
             // 
             // toolStripMenuItemOverview
             // 
             this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
-            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(360, 46);
             this.toolStripMenuItemOverview.Text = "Overview";
             this.toolStripMenuItemOverview.Click += new System.EventHandler(this.onOverviewClick);
             // 
             // toolStripMenuItemAbout
             // 
             this.toolStripMenuItemAbout.Name = "toolStripMenuItemAbout";
-            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(218, 46);
+            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(360, 46);
             this.toolStripMenuItemAbout.Text = "About";
             this.toolStripMenuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
             // 
@@ -312,6 +316,18 @@
             this.checkBoxReorderAttr.Text = "Reorder Attributes Alphabetically";
             this.checkBoxReorderAttr.UseVisualStyleBackColor = true;
             // 
+            // toolStripMenuItemPreferences
+            // 
+            this.toolStripMenuItemPreferences.Name = "toolStripMenuItemPreferences";
+            this.toolStripMenuItemPreferences.Size = new System.Drawing.Size(360, 46);
+            this.toolStripMenuItemPreferences.Text = "Preferences...";
+            this.toolStripMenuItemPreferences.Click += new System.EventHandler(this.OnPreferencesClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(357, 6);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -361,6 +377,8 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOverview;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAbout;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPreferences;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 
