@@ -45,7 +45,7 @@ namespace KritaBrushInfo {
             // Check for ExifTool .exe
             string exifToolExe = Properties.Settings.Default.ExifToolExe;
             if (exifToolExe == null || exifToolExe.Length == 0) {
-                Utils.Utils.errMsg("ExifTool .exe is not specified");
+                Utils.Utils.errMsg("ExifTool .exe is not specified.\nSet it in Preferences.");
                 return;
             }
             if (!File.Exists(exifToolExe)) {
