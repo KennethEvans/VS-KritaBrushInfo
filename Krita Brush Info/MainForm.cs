@@ -201,42 +201,23 @@ namespace KritaBrushInfo {
                 param = new KritaPresetParam(element);
                 // Parse inside the param
                 paramsCur.Add(param);
-                if (print) {
-                    if (!param.Err) {
-                        textBoxInfo.AppendText(param.info());
-                    } else {
+                if (!param.Err) {
+                    if (checkBoxReorderAttr.Checked) {
+                        //// DEBUG
+                        //if (print) {
+                        //    textBoxInfo.AppendText("B " + param.info());
+                        //}
+                        reorderAttributes(param);
+                        if (print) {
+                            textBoxInfo.AppendText(param.info());
+                        }
+                    }
+                } else {
+                    if (print) {
                         textBoxInfo.AppendText(param.ErrorMessage);
                     }
                 }
-                processSubElements(param);
             }
-        }
-        /// <summary>
-        /// Processes the sub-elements of the given KritaPresetParam.
-        /// The only processing is to reorder the attributes.
-        /// </summary>
-        /// <param name="param"></param>
-        private void processSubElements(KritaPresetParam param) {
-            // Do nothing unless checkBoxReorderAttr is checked.
-            if (!checkBoxReorderAttr.Checked) return;
-
-            string value = param.Value.Trim();
-            if (value == null || value.Length == 0) {
-                return;
-            }
-            if (!value.StartsWith("<") || !value.EndsWith(">")) {
-                return;
-            }
-#if replaceDocType
-            value = Regex.Replace(value, "\\<\\!DOCTYPE params\\>", "").Trim();
-#endif
-#if debugging
-            textBoxInfo.AppendText("*********************** begin *********************************" + NL);
-            textBoxInfo.AppendText(parseXmlElement(value));
-            textBoxInfo.AppendText("*********************** end ***********************************" + NL);
-#endif
-            // Reorder the attributes and replace param.Value
-            reorderAttributes(param);
         }
 
         /// <summary>
@@ -244,25 +225,38 @@ namespace KritaBrushInfo {
         /// </summary>
         /// <param name="param"></param>
         private void reorderAttributes(KritaPresetParam param) {
-            IEnumerable<XElement> elements;
-            IEnumerable<XAttribute> attributes;
-            XElement element = XElement.Parse(param.Value);
-            elements = element.Elements();
-            attributes = element.Attributes();
+            // Check if it an element
+            XElement element;
+            try {
+                element = XElement.Parse(param.Value);
+            } catch (Exception) {
+                return;
+            }
+            if (!element.HasAttributes) return;
+            reorderAllAttributes(element);
+            // Replace the param.Value, removing newlines that may have been added
+            // (Helps with formatting the output)
+            param.Value = element.ToString().Replace(System.Environment.NewLine, "");
+        }
+
+        private void reorderAllAttributes(XElement element) {
+            IEnumerable<XAttribute> attributes = element.Attributes();
+            IEnumerable<XElement> elements = element.Elements();
             List<XAttribute> attributesList = new List<XAttribute>(attributes.Count());
+            List<XElement> elementsList = new List<XElement>(elements.Count());
             foreach (XAttribute attribute in attributes) {
                 attributesList.Add(attribute);
             }
-            attributesList.Sort((attr1, attr2) => attr1.Value.CompareTo(attr2.Value));
-            XElement newElement = new XElement("New");
-            foreach (XAttribute attribute1 in attributesList) {
-                newElement.Add(new XAttribute(attribute1));
+            attributesList.Sort((attr1, attr2) =>
+                attr1.Name.ToString().CompareTo(attr2.Name.ToString()));
+            element.ReplaceAttributes();
+            foreach (XAttribute attribute in attributesList) {
+                element.Add(attribute);
             }
+            // Recurse for all elements
             foreach (XElement element1 in elements) {
-                newElement.Add(new XElement(element1));
+                reorderAllAttributes(element1);
             }
-            // Replace the param.Value
-            param.Value = newElement.Value.ToString();
         }
 
         /// <summary>
