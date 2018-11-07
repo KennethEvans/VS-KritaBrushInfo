@@ -20,6 +20,7 @@ namespace KritaBrushInfo {
         public readonly String NL = Environment.NewLine;
         private static ScrolledHTMLDialog overviewDlg;
         private static PreferencesDialog preferencesDlg;
+        private static bool checkForNonParamElements;
 
         public String fileName1 = "";
         public String fileName2 = "";
@@ -36,8 +37,16 @@ namespace KritaBrushInfo {
 
             textBoxFile1.Text = fileName1;
             textBoxFile2.Text = fileName2;
+            checkBoxReorderAttr.Checked = Properties.Settings.Default.ReorderAttributes;
+            checkBoxPrintRaw.Checked = Properties.Settings.Default.PrintRawXml;
         }
 
+        /// <summary>
+        /// Starts a process to run ExifTool, extracts the preset, and
+        /// calls processXml to process the preset.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="print">Whether to print progress to the output TextBox.</param>
         private void getInfo(String fileName, bool print) {
             if (fileName == null || fileName.Length == 0) {
                 return;
@@ -132,8 +141,49 @@ namespace KritaBrushInfo {
                     Utils.Utils.errMsg("Process failed");
                 }
             }
+
+            // Print the raw XML
+            if (print && checkBoxPrintRaw.Checked) {
+                processRawXml(presetText);
+            }
+
+            // Check for other elements than param
+            if (print) {
+                processCheckForNonParamElements(presetText);
+            }
         }
 
+        private bool processCheckForNonParamElements(string xmlString) {
+            XDocument doc = XDocument.Parse(xmlString);
+            List<XElement> elements = new List<XElement>();
+            foreach (XElement element in doc.ElementsAfterSelf()) {
+                if (!element.Name.Equals("param")) {
+                    elements.Add(element);
+                }
+            }
+            if (elements.Count > 0) {
+                StringBuilder output = new StringBuilder();
+                textBoxInfo.AppendText(NL + "Found elements not named param:" + NL);
+                foreach (XElement element in elements) {
+                    textBoxInfo.AppendText("    " + element.Name + NL);
+                }
+                return false;
+            }
+            return true;
+        }
+
+        private void processRawXml(string xmlString) {
+            textBoxInfo.AppendText(NL + "Raw XML:" + NL);
+            XDocument doc = XDocument.Parse(xmlString);
+            textBoxInfo.AppendText(doc.ToString());
+            textBoxInfo.AppendText(NL);
+        }
+
+        /// <summary>
+        /// Processes the preset text.
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <param name="print">Whether to print progress to the output TextBox.</param>
         private void processXml(String xmlString, bool print) {
             if (xmlString == null || xmlString.Length == 0) {
                 if (print) {
@@ -161,8 +211,15 @@ namespace KritaBrushInfo {
                 processSubElements(param);
             }
         }
-
+        /// <summary>
+        /// Processes the sub-elements of the given KritaPresetParam.
+        /// The only processing is to reorder the attributes.
+        /// </summary>
+        /// <param name="param"></param>
         private void processSubElements(KritaPresetParam param) {
+            // Do nothing unless checkBoxReorderAttr is checked.
+            if (!checkBoxReorderAttr.Checked) return;
+
             string value = param.Value.Trim();
             if (value == null || value.Length == 0) {
                 return;
@@ -180,9 +237,12 @@ namespace KritaBrushInfo {
 #endif
             // Reorder the attributes and replace param.Value
             reorderAttributes(param);
-
         }
 
+        /// <summary>
+        /// Reorders the attributes in the Element of the given KritaPresetParam.
+        /// </summary>
+        /// <param name="param"></param>
         private void reorderAttributes(KritaPresetParam param) {
             IEnumerable<XElement> elements;
             IEnumerable<XAttribute> attributes;
@@ -202,9 +262,7 @@ namespace KritaBrushInfo {
                 newElement.Add(new XElement(element1));
             }
             // Replace the param.Value
-            if (checkBoxReorderAttr.Checked) {
-                param.Value = newElement.Value.ToString();
-            }
+            param.Value = newElement.Value.ToString();
         }
 
         /// <summary>
@@ -407,6 +465,9 @@ namespace KritaBrushInfo {
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e) {
+            Properties.Settings.Default.ReorderAttributes = checkBoxReorderAttr.Checked;
+            Properties.Settings.Default.PrintRawXml = checkBoxPrintRaw.Checked;
+            Properties.Settings.Default.Save();
         }
 
         private void OnProcess1Click(object sender, EventArgs e) {

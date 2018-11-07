@@ -31,6 +31,8 @@
             this.textBoxFile1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemOverview = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemPreferences = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonBrowse1 = new System.Windows.Forms.Button();
             this.tableLayoutPanelFile2 = new System.Windows.Forms.TableLayoutPanel();
@@ -45,8 +47,7 @@
             this.buttonQuit = new System.Windows.Forms.Button();
             this.flowLayoutReorderAttr = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxReorderAttr = new System.Windows.Forms.CheckBox();
-            this.toolStripMenuItemPreferences = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.checkBoxPrintRaw = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelFile1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -69,12 +70,13 @@
             this.tableLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelTop.Name = "tableLayoutPanelTop";
-            this.tableLayoutPanelTop.RowCount = 5;
+            this.tableLayoutPanelTop.RowCount = 6;
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelTop.Size = new System.Drawing.Size(1652, 1063);
             this.tableLayoutPanelTop.TabIndex = 1;
             // 
@@ -129,19 +131,31 @@
             this.toolStripSeparator1,
             this.toolStripMenuItemAbout});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(361, 203);
+            this.contextMenuStrip.Size = new System.Drawing.Size(272, 148);
             // 
             // toolStripMenuItemOverview
             // 
             this.toolStripMenuItemOverview.Name = "toolStripMenuItemOverview";
-            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(360, 46);
+            this.toolStripMenuItemOverview.Size = new System.Drawing.Size(271, 46);
             this.toolStripMenuItemOverview.Text = "Overview";
             this.toolStripMenuItemOverview.Click += new System.EventHandler(this.onOverviewClick);
+            // 
+            // toolStripMenuItemPreferences
+            // 
+            this.toolStripMenuItemPreferences.Name = "toolStripMenuItemPreferences";
+            this.toolStripMenuItemPreferences.Size = new System.Drawing.Size(271, 46);
+            this.toolStripMenuItemPreferences.Text = "Preferences...";
+            this.toolStripMenuItemPreferences.Click += new System.EventHandler(this.OnPreferencesClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(268, 6);
             // 
             // toolStripMenuItemAbout
             // 
             this.toolStripMenuItemAbout.Name = "toolStripMenuItemAbout";
-            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(360, 46);
+            this.toolStripMenuItemAbout.Size = new System.Drawing.Size(271, 46);
             this.toolStripMenuItemAbout.Text = "About";
             this.toolStripMenuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
             // 
@@ -223,7 +237,7 @@
             this.textBoxInfo.Multiline = true;
             this.textBoxInfo.Name = "textBoxInfo";
             this.textBoxInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxInfo.Size = new System.Drawing.Size(1646, 827);
+            this.textBoxInfo.Size = new System.Drawing.Size(1646, 807);
             this.textBoxInfo.TabIndex = 0;
             // 
             // flowLayoutPanelButtons
@@ -236,7 +250,7 @@
             this.flowLayoutPanelButtons.Controls.Add(this.buttonProcess2);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonCompare);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonQuit);
-            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(500, 1012);
+            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(500, 992);
             this.flowLayoutPanelButtons.Name = "flowLayoutPanelButtons";
             this.flowLayoutPanelButtons.Size = new System.Drawing.Size(651, 48);
             this.flowLayoutPanelButtons.TabIndex = 0;
@@ -299,9 +313,10 @@
             this.flowLayoutReorderAttr.AutoSize = true;
             this.flowLayoutReorderAttr.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flowLayoutReorderAttr.Controls.Add(this.checkBoxReorderAttr);
+            this.flowLayoutReorderAttr.Controls.Add(this.checkBoxPrintRaw);
             this.flowLayoutReorderAttr.Location = new System.Drawing.Point(3, 131);
             this.flowLayoutReorderAttr.Name = "flowLayoutReorderAttr";
-            this.flowLayoutReorderAttr.Size = new System.Drawing.Size(475, 42);
+            this.flowLayoutReorderAttr.Size = new System.Drawing.Size(721, 42);
             this.flowLayoutReorderAttr.TabIndex = 4;
             // 
             // checkBoxReorderAttr
@@ -316,17 +331,15 @@
             this.checkBoxReorderAttr.Text = "Reorder Attributes Alphabetically";
             this.checkBoxReorderAttr.UseVisualStyleBackColor = true;
             // 
-            // toolStripMenuItemPreferences
+            // checkBoxPrintRaw
             // 
-            this.toolStripMenuItemPreferences.Name = "toolStripMenuItemPreferences";
-            this.toolStripMenuItemPreferences.Size = new System.Drawing.Size(360, 46);
-            this.toolStripMenuItemPreferences.Text = "Preferences...";
-            this.toolStripMenuItemPreferences.Click += new System.EventHandler(this.OnPreferencesClick);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(357, 6);
+            this.checkBoxPrintRaw.AutoSize = true;
+            this.checkBoxPrintRaw.Location = new System.Drawing.Point(478, 3);
+            this.checkBoxPrintRaw.Name = "checkBoxPrintRaw";
+            this.checkBoxPrintRaw.Size = new System.Drawing.Size(240, 36);
+            this.checkBoxPrintRaw.TabIndex = 5;
+            this.checkBoxPrintRaw.Text = "Print Raw XML";
+            this.checkBoxPrintRaw.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -379,6 +392,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAbout;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPreferences;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.CheckBox checkBoxPrintRaw;
     }
 }
 

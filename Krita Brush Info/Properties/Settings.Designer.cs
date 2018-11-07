@@ -58,5 +58,29 @@ namespace KritaBrushInfo.Properties {
                 this["ExifToolExe"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PrintRawXml {
+            get {
+                return ((bool)(this["PrintRawXml"]));
+            }
+            set {
+                this["PrintRawXml"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ReorderAttributes {
+            get {
+                return ((bool)(this["ReorderAttributes"]));
+            }
+            set {
+                this["ReorderAttributes"] = value;
+            }
+        }
     }
 }
