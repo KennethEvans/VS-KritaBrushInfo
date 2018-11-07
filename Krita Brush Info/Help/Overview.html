@@ -3,34 +3,32 @@
 <head>
 <link href="book.css" rel="stylesheet" type="text/css" />
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>ArtPad</title>
+<title>Krita Brush Info</title>
 </head>
 <body>
-<h1 align="center"><strong><img src="KritaBrushInfo2.256x256.png" alt="Logo" width="96" height="96" align="middle" /> Krita Brush Info Overview</strong></h1>
-<p align="left">Krita Brush Info is designed to read a Krita brush configuration and display it in a readable form.</p>
-<p align="left">There is a <a href="#Troubleshooting">Troubleshooting</a> section at the bottom of the page. There are also <a href="#Acknowledgements">Acknowledgements</a>. </p>
+<h1 align="center"><strong><img src="KritaBrushInfo2.256x256.png" alt="Logo" width="10%" align="middle" /> Krita Brush Info Overview</strong></h1>
+<p align="left">Krita Brush Info is designed to read a Krita brush configuration and display it in a readable form. It can also compare two brushes and show the differences. This can be useful for seeing the structure of the brush parameters and to easily compare the differences between two brushes. </p>
+<p align="left"><a href="#Acknowledgements">Acknowledgements</a> are at the end of the page. </p>
 <h3 align="left">How it Works</h3>
-<p>Add text. </p>
+<p>Krita brush parameters are stored in 200 x 200 PNG files. These files typically have the extension .kpp in Krita. The PNG image is the brush icon. These brushes may be built into Krita or come in resource bundles. In Krita you can modify and save the brushes as new brushes. These are stored in the paintoppresets folder in the Krita resources folder. You can find this folder in Krita 4 by going to Settings | Manage Resources... and then selecting Open Resource Folder. The brush presets are stored in the paintoppresets sub-folder.</p>
+<p>The brush parameters are stored in the metadata of the PNG file. There are no standards for storing metadata for PNG, as there are for JPEG and other file formats. However, the program ExifTool written by Paul Harvey (see <a href="#Acknowledgements">Acknowledgements</a>) does find the metadata. There may be other metadata in the file, but the brush parameters are in a field named Preset. This field is in the form of an XML element, also named Preset. This element has attributes including the name of the brush, and also a number of sub-elements, which are XML elements named param. These param elements contain the brush parameters, either as attributes or sub-elements. (This information does not appear to be documented and has been obtained by experimentation. It may be wrong or incomplete.)</p>
+<p>What Krita Brush Info does is run ExifTool on the .kpp files, extract the Preset element, and parse it for the various attributes and sub-elements. It displays these in a reasonably-easy-to-read form. It can get the attributes and parameters for two different files and compare them, displaying only the differences. </p>
+<h3>The Interface</h3>
+<p>This is a screen shot of The Krita Brush Info interface.</p>
+<p align="center"><img src="KritaBrushInfo-Screenshot-1.jpg" alt="Krita Brush Info Screenshot" width="80%" /></p>
+<p>The interface has a place to enter the names of two .kpp files. There is a check box to set if you want to compare parameters with the attributes in the order stored or sorted alphabetically. Unless this is checked, if the alphabetic order is different in two files, they will be marked as different even when the attributes have the same values.</p>
+<p>There are buttons to process File 1 or File 2, to Compare the two files, and to quit. There is no File menu. There is, however, a context menu, obtained by right-clicking on the form.  It contains items to display an Overview, set Preferences, and to display an About box.</p>
+<h3>Preferences</h3>
+<p>There is currently only one preference, the location of the ExifTool executable. (You want to use exiftool.exe, not exiftool(-k).exe.)</p>
 <h3>Installation</h3>
 <p>If you are installing from a download, just unzip the files into a directory somewhere convenient. Then run it from there. If you are installing from a build, copy these files and directories from the bin/Release directory to a convenient directory.</p>
 <ul>
-  <li>ArtPad.exe</li>
-  <li>Newtonsoft.Json.dll</li>
-  <li>WindowsInput.dll</li>
+  <li>KritaBrushInfo.exe</li>
   <li>Help</li>
 </ul>
-<p>To uninstall, just delete these files. </p>
-<p>It is suggested you make an ArtPad directory in My Documents to keep configuration files. </p>
-<p><strong><a name="TroubleshootingMenu" id="TroubleshootingMenu"></a>TROUBLESHOOTING</strong></p>
-<p><strong><a name="HelpOverview" id="HelpOverview"></a>Overview...</strong></p>
-<p>Shows this  overview . </p>
-<p><strong><a name="HelpAbout" id="HelpAbout"></a>About... </strong></p>
-<p>Shows information about this application. </p>
+<p>To uninstall, just delete these files.</p>
+<p>You also need to install <a href="https://www.sno.phy.queensu.ca/~phil/exiftool/">ExifTool</a> (see <a href="#Acknowledgements">Acknowledgements</a>). You specify the location of exiftool.exe in the Preferences. </p>
 <h3><a name="Acknowledgements" id="Acknowledgements"></a>Acknowledgements</h3>
-<p>ArtPad uses the packages <a href="http://www.newtonsoft.com/json">Json.net</a> and <a href="https://inputsimulator.codeplex.com/">Windows Input Simulator</a>. </p>
-<h3><a name="Troubleshooting" id="Troubleshooting"></a>Troubleshooting</h3>
-<p><strong>I can't move ArtPad because the title bar is too small to find a place to drag.</strong></p>
-<p>Add text. </p>
-<p>&nbsp;</p>
+<p>Krita Brush Info uses <a href="https://www.sno.phy.queensu.ca/~phil/exiftool/">ExifToo</a>l by Paul Harvey to read the EXIF information in the .kpp preset file. This is free software; you can redistribute it and/or modify it under the same terms as&nbsp;<a href="http://dev.perl.org/licenses/">Perl</a>, which it uses. </p>
 </body>
 </html>

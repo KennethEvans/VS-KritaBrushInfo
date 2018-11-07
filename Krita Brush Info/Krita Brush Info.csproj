@@ -116,6 +116,9 @@
     <Content Include="Help\book.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Help\KritaBrushInfo-Screenshot-1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Help\KritaBrushInfo2.256x256.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
