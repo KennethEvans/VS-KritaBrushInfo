@@ -47,7 +47,7 @@ namespace KritaBrushInfo {
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="print">Whether to print progress to the output TextBox.</param>
-        private void getInfo(String fileName, bool print) {
+        private void processFile(String fileName, bool print) {
             if (fileName == null || fileName.Length == 0) {
                 return;
             }
@@ -62,7 +62,7 @@ namespace KritaBrushInfo {
                 return;
             }
 
-            String output = "";
+            string metadataText = "";
             string presetText = "";
             if (print) {
                 textBoxInfo.Text = fileName + NL + NL;
@@ -89,19 +89,17 @@ namespace KritaBrushInfo {
                 process.BeginErrorReadLine();
                 var processExited = process.WaitForExit(PROCESS_TIMEOUT);
 
+                metadataText = outputStringBuilder.ToString();
                 if (processExited == false) {
                     // Timed out
                     process.Kill();
-                    output = outputStringBuilder.ToString();
                     throw new Exception("\nERROR: Process took too long to finish");
                 } else if (process.ExitCode != 0) {
-                    output = outputStringBuilder.ToString();
                     throw new Exception("Process exited with non-zero exit code of: "
                         + process.ExitCode + Environment.NewLine
-                        + "Output from process: " + outputStringBuilder.ToString());
+                        + "Output from process: " + metadataText);
                 } else {
                     success = true;
-                    output = outputStringBuilder.ToString();
                 }
             } catch (Exception ex) {
                 if (print) {
@@ -113,7 +111,7 @@ namespace KritaBrushInfo {
                 process.Close();
             }
             if (success) {
-                if (output == null || output.Length == 0) {
+                if (metadataText == null || metadataText.Length == 0) {
                     if (print) {
                         textBoxInfo.AppendText("No output produced");
                     } else {
@@ -122,24 +120,24 @@ namespace KritaBrushInfo {
                     return;
                 }
                 // Find the preset
-                int start = output.IndexOf("<Preset ");
-                int end = output.LastIndexOf("</Preset>");
+                int start = metadataText.IndexOf("<Preset ");
+                int end = metadataText.LastIndexOf("</Preset>");
                 if (start == -1 || end == -1) {
                     if (print) {
                         textBoxInfo.AppendText("Cannot find Preset element");
                     }
                     return;
                 }
-                int len = output.Length;
-                presetText = output.Substring(start, end - start + 9);
+                int len = metadataText.Length;
+                presetText = metadataText.Substring(start, end - start + 9);
                 processXml(presetText, print);
             } else {
                 if (print) {
                     textBoxInfo.AppendText("\nProcess failed\nThe output is:\n");
-                    textBoxInfo.AppendText(output);
-                } else {
-                    Utils.Utils.errMsg("Process failed");
+                    textBoxInfo.AppendText(metadataText);
                 }
+                Utils.Utils.errMsg("Process failed");
+                return;
             }
 
             // Print the raw XML
@@ -153,36 +151,10 @@ namespace KritaBrushInfo {
             }
         }
 
-        private bool processCheckForNonParamElements(string xmlString) {
-            XDocument doc = XDocument.Parse(xmlString);
-            List<XElement> elements = new List<XElement>();
-            foreach (XElement element in doc.ElementsAfterSelf()) {
-                if (!element.Name.Equals("param")) {
-                    elements.Add(element);
-                }
-            }
-            if (elements.Count > 0) {
-                StringBuilder output = new StringBuilder();
-                textBoxInfo.AppendText(NL + "Found elements not named param:" + NL);
-                foreach (XElement element in elements) {
-                    textBoxInfo.AppendText("    " + element.Name + NL);
-                }
-                return false;
-            }
-            return true;
-        }
-
-        private void processRawXml(string xmlString) {
-            textBoxInfo.AppendText(NL + "Raw XML:" + NL);
-            XDocument doc = XDocument.Parse(xmlString);
-            textBoxInfo.AppendText(doc.ToString());
-            textBoxInfo.AppendText(NL);
-        }
-
         /// <summary>
         /// Processes the preset text.
         /// </summary>
-        /// <param name="xmlString"></param>
+        /// <param name="xmlString is the presetText."></param>
         /// <param name="print">Whether to print progress to the output TextBox.</param>
         private void processXml(String xmlString, bool print) {
             if (xmlString == null || xmlString.Length == 0) {
@@ -195,6 +167,7 @@ namespace KritaBrushInfo {
             // DEBUG
             textBoxInfo.AppendText(xmlString + NL + NL);
 #endif
+            // Calculate the KritaPresetParam's
             XDocument doc = XDocument.Parse(xmlString);
             KritaPresetParam param = null;
             foreach (XElement element in doc.Descendants("param")) {
@@ -202,15 +175,13 @@ namespace KritaBrushInfo {
                 // Parse inside the param
                 paramsCur.Add(param);
                 if (!param.Err) {
-                    if (checkBoxReorderAttr.Checked) {
-                        //// DEBUG
-                        //if (print) {
-                        //    textBoxInfo.AppendText("B " + param.info());
-                        //}
-                        reorderAttributes(param);
-                        if (print) {
-                            textBoxInfo.AppendText(param.info());
-                        }
+                    //// DEBUG
+                    //if (print) {
+                    //    textBoxInfo.AppendText("B " + param.info());
+                    //}
+                    if (checkBoxReorderAttr.Checked) reorderAttributes(param);
+                    if (print) {
+                        textBoxInfo.AppendText(param.info());
                     }
                 } else {
                     if (print) {
@@ -257,6 +228,41 @@ namespace KritaBrushInfo {
             foreach (XElement element1 in elements) {
                 reorderAllAttributes(element1);
             }
+        }
+        /// <summary>
+        /// Checks if there are any other elements besides param in the preset.
+        /// (If so, we are not handling them.)
+        /// </summary>
+        /// <param name="xmlString"></param>
+        /// <returns></returns>
+        private bool processCheckForNonParamElements(string xmlString) {
+            XDocument doc = XDocument.Parse(xmlString);
+            List<XElement> elements = new List<XElement>();
+            foreach (XElement element in doc.ElementsAfterSelf()) {
+                if (!element.Name.Equals("param")) {
+                    elements.Add(element);
+                }
+            }
+            if (elements.Count > 0) {
+                StringBuilder output = new StringBuilder();
+                textBoxInfo.AppendText(NL + "Found elements not named param:" + NL);
+                foreach (XElement element in elements) {
+                    textBoxInfo.AppendText("    " + element.Name + NL);
+                }
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Prints the formated Preset field in the output.
+        /// </summary>
+        /// <param name="xmlString"></param>
+        private void processRawXml(string xmlString) {
+            textBoxInfo.AppendText(NL + "Raw XML:" + NL);
+            XDocument doc = XDocument.Parse(xmlString);
+            textBoxInfo.AppendText(doc.ToString());
+            textBoxInfo.AppendText(NL);
         }
 
         /// <summary>
@@ -347,18 +353,21 @@ namespace KritaBrushInfo {
             return info.ToString();
         }
 
+        /// <summary>
+        /// Compares the two files and displays the output.
+        /// </summary>
         private void compare() {
             // Rerun getting params for both files
             params1.Clear();
             paramsCur = params1;
-            getInfo(fileName1, false);
+            processFile(fileName1, false);
             if (params1.Count == 0) {
                 Utils.Utils.errMsg("Did not get params for File 1");
                 return;
             }
             params2.Clear();
             paramsCur = params2;
-            getInfo(fileName2, false);
+            processFile(fileName2, false);
             if (params2.Count == 0) {
                 Utils.Utils.errMsg("Did not get params for File 2");
                 return;
@@ -475,7 +484,7 @@ namespace KritaBrushInfo {
             }
             params1.Clear();
             paramsCur = params1;
-            getInfo(fileName1, true);
+            processFile(fileName1, true);
         }
 
         private void OnProcess2Click(object sender, EventArgs e) {
@@ -489,7 +498,7 @@ namespace KritaBrushInfo {
             }
             params1.Clear();
             paramsCur = params1;
-            getInfo(fileName2, true);
+            processFile(fileName2, true);
         }
 
         private void OnCompareClick(object sender, EventArgs e) {
