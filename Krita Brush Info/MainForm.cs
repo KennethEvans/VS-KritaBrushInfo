@@ -383,7 +383,7 @@ namespace KritaBrushInfo {
                     textBoxInfo.AppendText(param1.Name + NL);
                     textBoxInfo.AppendText("   1: " + param1.Value + NL);
                     textBoxInfo.AppendText("   2: Not found in 2" + NL);
-                    break;
+                    continue;
                 }
                 if (found && !param1.equalsExceptType(foundParam)) {
                     textBoxInfo.AppendText(param1.Name + NL);
