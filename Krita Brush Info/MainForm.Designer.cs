@@ -52,11 +52,11 @@
             this.buttonBrowse2 = new System.Windows.Forms.Button();
             this.tableLayoutPanelBundle2 = new System.Windows.Forms.TableLayoutPanel();
             this.labelBundle2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.labelBundleFile2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.textBoxBundle2 = new System.Windows.Forms.TextBox();
+            this.buttonBrowseBundle2 = new System.Windows.Forms.Button();
+            this.labelBundleBrush2 = new System.Windows.Forms.Label();
+            this.textBoxBrush2 = new System.Windows.Forms.TextBox();
+            this.buttonBrowseBrush2 = new System.Windows.Forms.Button();
             this.flowLayoutCheckBoxes = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxReorderAttr = new System.Windows.Forms.CheckBox();
             this.checkBoxPrintRaw = new System.Windows.Forms.CheckBox();
@@ -288,6 +288,7 @@
             this.buttonBundleBrowse1.TabIndex = 1;
             this.buttonBundleBrowse1.Text = "Browse";
             this.buttonBundleBrowse1.UseVisualStyleBackColor = false;
+            this.buttonBundleBrowse1.Click += new System.EventHandler(this.OnBrowseBundle1Click);
             // 
             // labelBundleFile1
             // 
@@ -323,6 +324,7 @@
             this.buttonBrush1.TabIndex = 3;
             this.buttonBrush1.Text = "Browse";
             this.buttonBrush1.UseVisualStyleBackColor = false;
+            this.buttonBrush1.Click += new System.EventHandler(this.OnBrowseBrush1Click);
             // 
             // groupBoxBrush2
             // 
@@ -419,11 +421,11 @@
             this.tableLayoutPanelBundle2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelBundle2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanelBundle2.Controls.Add(this.labelBundle2, 0, 0);
-            this.tableLayoutPanelBundle2.Controls.Add(this.textBox1, 1, 0);
-            this.tableLayoutPanelBundle2.Controls.Add(this.button1, 2, 0);
-            this.tableLayoutPanelBundle2.Controls.Add(this.labelBundleFile2, 0, 1);
-            this.tableLayoutPanelBundle2.Controls.Add(this.textBox2, 1, 1);
-            this.tableLayoutPanelBundle2.Controls.Add(this.button2, 2, 1);
+            this.tableLayoutPanelBundle2.Controls.Add(this.textBoxBundle2, 1, 0);
+            this.tableLayoutPanelBundle2.Controls.Add(this.buttonBrowseBundle2, 2, 0);
+            this.tableLayoutPanelBundle2.Controls.Add(this.labelBundleBrush2, 0, 1);
+            this.tableLayoutPanelBundle2.Controls.Add(this.textBoxBrush2, 1, 1);
+            this.tableLayoutPanelBundle2.Controls.Add(this.buttonBrowseBrush2, 2, 1);
             this.tableLayoutPanelBundle2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBundle2.Location = new System.Drawing.Point(3, 57);
             this.tableLayoutPanelBundle2.Name = "tableLayoutPanelBundle2";
@@ -446,62 +448,64 @@
             this.labelBundle2.Text = "Bundle 2:";
             this.labelBundle2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // textBox1
+            // textBoxBundle2
             // 
-            this.textBox1.ContextMenuStrip = this.contextMenuStrip;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(199, 3);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1023, 38);
-            this.textBox1.TabIndex = 0;
+            this.textBoxBundle2.ContextMenuStrip = this.contextMenuStrip;
+            this.textBoxBundle2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxBundle2.Location = new System.Drawing.Point(199, 3);
+            this.textBoxBundle2.Name = "textBoxBundle2";
+            this.textBoxBundle2.Size = new System.Drawing.Size(1023, 38);
+            this.textBoxBundle2.TabIndex = 0;
             // 
-            // button1
+            // buttonBrowseBundle2
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.button1.AutoSize = true;
-            this.button1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(1228, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(119, 42);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Browse";
-            this.button1.UseVisualStyleBackColor = false;
+            this.buttonBrowseBundle2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.buttonBrowseBundle2.AutoSize = true;
+            this.buttonBrowseBundle2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonBrowseBundle2.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonBrowseBundle2.Location = new System.Drawing.Point(1228, 3);
+            this.buttonBrowseBundle2.Name = "buttonBrowseBundle2";
+            this.buttonBrowseBundle2.Size = new System.Drawing.Size(119, 42);
+            this.buttonBrowseBundle2.TabIndex = 1;
+            this.buttonBrowseBundle2.Text = "Browse";
+            this.buttonBrowseBundle2.UseVisualStyleBackColor = false;
+            this.buttonBrowseBundle2.Click += new System.EventHandler(this.OnBrowseBundle2Click);
             // 
-            // labelBundleFile2
+            // labelBundleBrush2
             // 
-            this.labelBundleFile2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.labelBundleBrush2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelBundleFile2.AutoSize = true;
-            this.labelBundleFile2.BackColor = System.Drawing.SystemColors.Control;
-            this.labelBundleFile2.Location = new System.Drawing.Point(3, 48);
-            this.labelBundleFile2.Name = "labelBundleFile2";
-            this.labelBundleFile2.Size = new System.Drawing.Size(190, 48);
-            this.labelBundleFile2.TabIndex = 4;
-            this.labelBundleFile2.Text = "Bundle File 2:";
-            this.labelBundleFile2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelBundleBrush2.AutoSize = true;
+            this.labelBundleBrush2.BackColor = System.Drawing.SystemColors.Control;
+            this.labelBundleBrush2.Location = new System.Drawing.Point(3, 48);
+            this.labelBundleBrush2.Name = "labelBundleBrush2";
+            this.labelBundleBrush2.Size = new System.Drawing.Size(190, 48);
+            this.labelBundleBrush2.TabIndex = 4;
+            this.labelBundleBrush2.Text = "Bundle File 2:";
+            this.labelBundleBrush2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // textBox2
+            // textBoxBrush2
             // 
-            this.textBox2.ContextMenuStrip = this.contextMenuStrip;
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Location = new System.Drawing.Point(199, 51);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(1023, 38);
-            this.textBox2.TabIndex = 2;
+            this.textBoxBrush2.ContextMenuStrip = this.contextMenuStrip;
+            this.textBoxBrush2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxBrush2.Location = new System.Drawing.Point(199, 51);
+            this.textBoxBrush2.Name = "textBoxBrush2";
+            this.textBoxBrush2.Size = new System.Drawing.Size(1023, 38);
+            this.textBoxBrush2.TabIndex = 2;
             // 
-            // button2
+            // buttonBrowseBrush2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.button2.AutoSize = true;
-            this.button2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.button2.BackColor = System.Drawing.SystemColors.Control;
-            this.button2.Location = new System.Drawing.Point(1228, 51);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(119, 42);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Browse";
-            this.button2.UseVisualStyleBackColor = false;
+            this.buttonBrowseBrush2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.buttonBrowseBrush2.AutoSize = true;
+            this.buttonBrowseBrush2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonBrowseBrush2.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonBrowseBrush2.Location = new System.Drawing.Point(1228, 51);
+            this.buttonBrowseBrush2.Name = "buttonBrowseBrush2";
+            this.buttonBrowseBrush2.Size = new System.Drawing.Size(119, 42);
+            this.buttonBrowseBrush2.TabIndex = 3;
+            this.buttonBrowseBrush2.Text = "Browse";
+            this.buttonBrowseBrush2.UseVisualStyleBackColor = false;
+            this.buttonBrowseBrush2.Click += new System.EventHandler(this.OnBrowseBrush2Click);
             // 
             // flowLayoutCheckBoxes
             // 
@@ -581,9 +585,9 @@
             this.flowLayoutPanelButtons.Controls.Add(this.buttonProcess2);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonCompare);
             this.flowLayoutPanelButtons.Controls.Add(this.buttonQuit);
-            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(358, 1061);
+            this.flowLayoutPanelButtons.Location = new System.Drawing.Point(331, 1061);
             this.flowLayoutPanelButtons.Name = "flowLayoutPanelButtons";
-            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(651, 48);
+            this.flowLayoutPanelButtons.Size = new System.Drawing.Size(705, 48);
             this.flowLayoutPanelButtons.TabIndex = 0;
             this.flowLayoutPanelButtons.WrapContents = false;
             // 
@@ -594,9 +598,9 @@
             this.buttonProcess1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.buttonProcess1.Location = new System.Drawing.Point(3, 3);
             this.buttonProcess1.Name = "buttonProcess1";
-            this.buttonProcess1.Size = new System.Drawing.Size(204, 42);
+            this.buttonProcess1.Size = new System.Drawing.Size(231, 42);
             this.buttonProcess1.TabIndex = 0;
-            this.buttonProcess1.Text = "Process File 1";
+            this.buttonProcess1.Text = "Process Brush 1";
             this.buttonProcess1.UseVisualStyleBackColor = true;
             this.buttonProcess1.Click += new System.EventHandler(this.OnProcess1Click);
             // 
@@ -605,11 +609,11 @@
             this.buttonProcess2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonProcess2.AutoSize = true;
             this.buttonProcess2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonProcess2.Location = new System.Drawing.Point(213, 3);
+            this.buttonProcess2.Location = new System.Drawing.Point(240, 3);
             this.buttonProcess2.Name = "buttonProcess2";
-            this.buttonProcess2.Size = new System.Drawing.Size(204, 42);
+            this.buttonProcess2.Size = new System.Drawing.Size(231, 42);
             this.buttonProcess2.TabIndex = 1;
-            this.buttonProcess2.Text = "Process File 2";
+            this.buttonProcess2.Text = "Process Brush 2";
             this.buttonProcess2.UseVisualStyleBackColor = true;
             this.buttonProcess2.Click += new System.EventHandler(this.OnProcess2Click);
             // 
@@ -618,7 +622,7 @@
             this.buttonCompare.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonCompare.AutoSize = true;
             this.buttonCompare.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonCompare.Location = new System.Drawing.Point(423, 3);
+            this.buttonCompare.Location = new System.Drawing.Point(477, 3);
             this.buttonCompare.Name = "buttonCompare";
             this.buttonCompare.Size = new System.Drawing.Size(141, 42);
             this.buttonCompare.TabIndex = 2;
@@ -631,7 +635,7 @@
             this.buttonQuit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonQuit.AutoSize = true;
             this.buttonQuit.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonQuit.Location = new System.Drawing.Point(570, 3);
+            this.buttonQuit.Location = new System.Drawing.Point(624, 3);
             this.buttonQuit.Name = "buttonQuit";
             this.buttonQuit.Size = new System.Drawing.Size(78, 42);
             this.buttonQuit.TabIndex = 3;
@@ -707,11 +711,11 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelGroupBoxFile2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelBundle2;
         private System.Windows.Forms.Label labelBundle2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label labelBundleFile2;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox textBoxBundle2;
+        private System.Windows.Forms.Button buttonBrowseBundle2;
+        private System.Windows.Forms.Label labelBundleBrush2;
+        private System.Windows.Forms.TextBox textBoxBrush2;
+        private System.Windows.Forms.Button buttonBrowseBrush2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFile1;
         private System.Windows.Forms.Label labelFile1;
         private System.Windows.Forms.TextBox textBoxFile1;

@@ -38,6 +38,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +56,12 @@
     </Compile>
     <Compile Include="AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BrushesInBundleDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BrushesInBundleDialog.Designer.cs">
+      <DependentUpon>BrushesInBundleDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="KritaPresetParam.cs" />
     <Compile Include="MainForm.cs">
@@ -79,6 +87,9 @@
     <Compile Include="Utils.cs" />
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BrushesInBundleDialog.resx">
+      <DependentUpon>BrushesInBundleDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

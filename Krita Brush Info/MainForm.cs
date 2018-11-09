@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,35 +15,121 @@ using System.Xml.Linq;
 namespace KritaBrushInfo {
 
     public partial class MainForm : Form {
-        public readonly String DEFAULT_FILE_NAME = @"C:\Users\evans\AppData\Roaming\krita\paintoppresets\DA_Oil_16_Rough_Blocking_Soft.kpp";
+        enum FileType { File1, File2, Bundle1, Bundle2, Brush1, Brush2 };
         public readonly String EXIFTOOL_NAME = @"C:\bin\EXIFTool\exiftool.exe";
         public readonly int PROCESS_TIMEOUT = 5000; // ms
         public readonly String NL = Environment.NewLine;
         private static ScrolledHTMLDialog overviewDlg;
         private static PreferencesDialog preferencesDlg;
-        private static bool checkForNonParamElements;
-
-        public String fileName1 = "";
-        public String fileName2 = "";
 
         private List<KritaPresetParam> params1 = new List<KritaPresetParam>();
         private List<KritaPresetParam> params2 = new List<KritaPresetParam>();
         private List<KritaPresetParam> paramsCur;
 
         public MainForm() {
-            fileName1 = Properties.Settings.Default.FileName1;
-            fileName2 = Properties.Settings.Default.FileName2;
-
             InitializeComponent();
 
-            // Set the correct panel by ing  the BundleCheckState handler
-            OnBundle1CheckStateChanged(null, null);
-            OnBundle2CheckStateChanged(null, null);
-
-            textBoxFile1.Text = fileName1;
-            textBoxFile2.Text = fileName2;
+            textBoxFile1.Text = Properties.Settings.Default.FileName1;
+            textBoxFile2.Text = Properties.Settings.Default.FileName2;
+            textBoxBundle1.Text = Properties.Settings.Default.BundleName1;
+            textBoxBundle2.Text = Properties.Settings.Default.BundleName2;
+            textBoxBrush1.Text = Properties.Settings.Default.BrushName1;
+            textBoxBrush2.Text = Properties.Settings.Default.BrushName2;
             checkBoxReorderAttr.Checked = Properties.Settings.Default.ReorderAttributes;
             checkBoxPrintRaw.Checked = Properties.Settings.Default.PrintRawXml;
+            checkBoxBundle1.Checked = Properties.Settings.Default.UseBundle1;
+            checkBoxBundle2.Checked = Properties.Settings.Default.UseBundle2;
+
+            // Set the correct panel by running the BundleCheckState handler
+            OnBundle1CheckStateChanged(null, null);
+            OnBundle2CheckStateChanged(null, null);
+        }
+
+        /// <summary>
+        /// Starts a process to run ExifTool, extracts the preset, and
+        /// calls processXml to process the Preset text.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="print">Whether to print progress to the output TextBox.</param>
+        private void processFile(string fileName, string displayName, bool print) {
+            if (print) {
+                textBoxInfo.Text = displayName + NL + NL;
+            }
+            // Get the preset text
+            string presetText = getPresetTextFromFile(fileName);
+            if (presetText == null) {
+                textBoxInfo.AppendText("Failed to get Preset text" + NL);
+                return;
+            }
+            // Process the XML
+            processXml(presetText, print);
+        }
+
+        /// <summary>
+        /// Processes the preset text.
+        /// </summary>
+        /// <param name="presetText is the presetText."></param>
+        /// <param name="print">Whether to print progress to the output TextBox.</param>
+        private void processXml(String presetText, bool print) {
+            if (presetText == null || presetText.Length == 0) {
+                if (print) {
+                    textBoxInfo.AppendText("\nThe preset element is not defined");
+                }
+                return;
+            }
+#if debugging
+            // DEBUG
+            textBoxInfo.AppendText(xmlString + NL + NL);
+#endif
+            // Calculate the KritaPresetParam's
+            XDocument doc = XDocument.Parse(presetText);
+            KritaPresetParam param = null;
+            foreach (XElement element in doc.Descendants("param")) {
+                param = new KritaPresetParam(element);
+                // Parse inside the param
+                paramsCur.Add(param);
+                if (!param.Err) {
+                    //// DEBUG
+                    //if (print) {
+                    //    textBoxInfo.AppendText("B " + param.info());
+                    //}
+                    if (checkBoxReorderAttr.Checked) reorderAttributes(param);
+                    if (print) {
+                        textBoxInfo.AppendText(param.info());
+                    }
+                } else {
+                    if (print) {
+                        textBoxInfo.AppendText(param.ErrorMessage);
+                    }
+                }
+            }
+            // Print the raw XML
+            if (print && checkBoxPrintRaw.Checked) {
+                processRawXml(presetText);
+            }
+            // Check for other elements than param
+            if (print) {
+                processCheckForNonParamElements(presetText);
+            }
+        }
+
+        /// <summary>
+        /// Checks if ExifTool exists and is valid and returns the name of the
+        /// executable if successful.
+        /// </summary>
+        /// <returns>Name of the ExifTool executable or null on failure.</returns>
+        private string getExifTool() {
+            // Check for ExifTool .exe
+            string exifToolExe = Properties.Settings.Default.ExifToolExe;
+            if (exifToolExe == null || exifToolExe.Length == 0) {
+                Utils.Utils.errMsg("ExifTool .exe is not specified.\nSet it in Preferences.");
+                return null;
+            }
+            if (!File.Exists(exifToolExe)) {
+                Utils.Utils.errMsg("ExifTool (" + exifToolExe + ") does not exist");
+                return null;
+            }
+            return exifToolExe;
         }
 
         /// <summary>
@@ -50,27 +137,15 @@ namespace KritaBrushInfo {
         /// calls processXml to process the preset.
         /// </summary>
         /// <param name="fileName"></param>
-        /// <param name="print">Whether to print progress to the output TextBox.</param>
-        private void processFile(String fileName, bool print) {
-            if (fileName == null || fileName.Length == 0) {
-                return;
-            }
-            // Check for ExifTool .exe
-            string exifToolExe = Properties.Settings.Default.ExifToolExe;
-            if (exifToolExe == null || exifToolExe.Length == 0) {
-                Utils.Utils.errMsg("ExifTool .exe is not specified.\nSet it in Preferences.");
-                return;
-            }
-            if (!File.Exists(exifToolExe)) {
-                Utils.Utils.errMsg("ExifTool (" + exifToolExe + ") does not exist");
-                return;
-            }
+        /// <param name="print"></param>
+        /// <returns></returns>
+        private string getPresetTextFromFile(string fileName) {
+            if (fileName == null || fileName.Length == 0) return null;
+            string exifToolExe = getExifTool();
+            if (exifToolExe == null) return null;
 
-            string metadataText = "";
-            string presetText = "";
-            if (print) {
-                textBoxInfo.Text = fileName + NL + NL;
-            }
+            string metadataText = null;
+            string presetText = null;
             Process process = new Process();
             StringBuilder outputStringBuilder = new StringBuilder();
             bool success = false;
@@ -106,93 +181,29 @@ namespace KritaBrushInfo {
                     success = true;
                 }
             } catch (Exception ex) {
-                if (print) {
-                    textBoxInfo.AppendText("\nError running process: " + ex.Message);
-                } else {
-                    Utils.Utils.excMsg("Error running process: ", ex);
-                }
+                Utils.Utils.excMsg("Error running ExifTool process: ", ex);
             } finally {
                 process.Close();
             }
             if (success) {
                 if (metadataText == null || metadataText.Length == 0) {
-                    if (print) {
-                        textBoxInfo.AppendText("No output produced");
-                    } else {
-                        Utils.Utils.errMsg("No output produced");
-                    }
-                    return;
+                    Utils.Utils.errMsg("Metadata is missing or empty");
+                    return null;
                 }
                 // Find the preset
                 int start = metadataText.IndexOf("<Preset ");
                 int end = metadataText.LastIndexOf("</Preset>");
                 if (start == -1 || end == -1) {
-                    if (print) {
-                        textBoxInfo.AppendText("Cannot find Preset element");
-                    }
-                    return;
+                    Utils.Utils.errMsg("Cannot find Preset element in metadata");
+                    return null;
                 }
                 int len = metadataText.Length;
                 presetText = metadataText.Substring(start, end - start + 9);
-                processXml(presetText, print);
             } else {
-                if (print) {
-                    textBoxInfo.AppendText("\nProcess failed\nThe output is:\n");
-                    textBoxInfo.AppendText(metadataText);
-                }
-                Utils.Utils.errMsg("Process failed");
-                return;
+                Utils.Utils.errMsg("Failed to process metadata");
+                return null;
             }
-
-            // Print the raw XML
-            if (print && checkBoxPrintRaw.Checked) {
-                processRawXml(presetText);
-            }
-
-            // Check for other elements than param
-            if (print) {
-                processCheckForNonParamElements(presetText);
-            }
-        }
-
-        /// <summary>
-        /// Processes the preset text.
-        /// </summary>
-        /// <param name="xmlString is the presetText."></param>
-        /// <param name="print">Whether to print progress to the output TextBox.</param>
-        private void processXml(String xmlString, bool print) {
-            if (xmlString == null || xmlString.Length == 0) {
-                if (print) {
-                    textBoxInfo.AppendText("\nThe preset element is not defined");
-                }
-                return;
-            }
-#if debugging
-            // DEBUG
-            textBoxInfo.AppendText(xmlString + NL + NL);
-#endif
-            // Calculate the KritaPresetParam's
-            XDocument doc = XDocument.Parse(xmlString);
-            KritaPresetParam param = null;
-            foreach (XElement element in doc.Descendants("param")) {
-                param = new KritaPresetParam(element);
-                // Parse inside the param
-                paramsCur.Add(param);
-                if (!param.Err) {
-                    //// DEBUG
-                    //if (print) {
-                    //    textBoxInfo.AppendText("B " + param.info());
-                    //}
-                    if (checkBoxReorderAttr.Checked) reorderAttributes(param);
-                    if (print) {
-                        textBoxInfo.AppendText(param.info());
-                    }
-                } else {
-                    if (print) {
-                        textBoxInfo.AppendText(param.ErrorMessage);
-                    }
-                }
-            }
+            return presetText;
         }
 
         /// <summary>
@@ -357,27 +368,156 @@ namespace KritaBrushInfo {
             return info.ToString();
         }
 
+        private void process1(bool print) {
+            String name = "";
+            if (checkBoxBundle1.Checked) {
+                name = textBoxBundle1.Text;
+                if (name == null || name.Length == 0) {
+                    Utils.Utils.errMsg("Bundle 1 is not defined");
+                    return;
+                }
+                if (!File.Exists(name)) {
+                    Utils.Utils.errMsg(name + " does not exist");
+                    return;
+                }
+                // Get the preset file from the bundle
+                string brushName = textBoxBrush1.Text;
+                string tempFile = null;
+                try {
+                    tempFile = Path.GetTempFileName();
+                    if (File.Exists(tempFile)) File.Delete(tempFile);
+                    bool found = false;
+                    using (ZipArchive archive = ZipFile.OpenRead(name)) {
+                        foreach (ZipArchiveEntry entry in archive.Entries) {
+                            if (entry.Name.Equals(brushName)) {
+                                found = true;
+                                entry.ExtractToFile(tempFile);
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        Utils.Utils.errMsg("Not found: " + brushName);
+                        return;
+                    }
+                    params1.Clear();
+                    paramsCur = params1;
+                    processFile(tempFile, name + NL + "    Brush: " + brushName, true);
+                } catch (Exception ex) {
+                    Utils.Utils.excMsg("Failed to find " + brushName, ex);
+                    return;
+                } finally {
+                    if (tempFile != null && File.Exists(tempFile)) {
+                        File.Delete(tempFile);
+                    }
+                }
+            } else {
+                name = textBoxFile1.Text;
+                if (name == null || name.Length == 0) {
+                    Utils.Utils.errMsg("File 1 is not defined");
+                    return;
+                }
+                if (!File.Exists(name)) {
+                    Utils.Utils.errMsg(name + " does not exist");
+                    return;
+                }
+                params1.Clear();
+                paramsCur = params1;
+                processFile(name, name, print);
+            }
+        }
+
+        private void process2(bool print) {
+            String name = "";
+            if (checkBoxBundle2.Checked) {
+                name = textBoxBundle2.Text;
+                if (name == null || name.Length == 0) {
+                    Utils.Utils.errMsg("Bundle 2 is not defined");
+                    return;
+                }
+                if (!File.Exists(name)) {
+                    Utils.Utils.errMsg(name + " does not exist");
+                    return;
+                }
+                // Get the preset file from the bundle
+                string brushName = textBoxBrush2.Text;
+                string tempFile = null;
+                try {
+                    tempFile = Path.GetTempFileName();
+                    if (File.Exists(tempFile)) File.Delete(tempFile);
+                    bool found = false;
+                    using (ZipArchive archive = ZipFile.OpenRead(name)) {
+                        foreach (ZipArchiveEntry entry in archive.Entries) {
+                            if (entry.Name.Equals(brushName)) {
+                                found = true;
+                                entry.ExtractToFile(tempFile);
+                                break;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        Utils.Utils.errMsg("Not found: " + brushName);
+                        return;
+                    }
+                    params2.Clear();
+                    paramsCur = params2;
+                    processFile(tempFile, name + NL + "    Brush: " + brushName, true);
+                } catch (Exception ex) {
+                    Utils.Utils.excMsg("Failed to find " + brushName, ex);
+                    return;
+                } finally {
+                    if (tempFile != null && File.Exists(tempFile)) {
+                        File.Delete(tempFile);
+                    }
+                }
+            } else {
+                name = textBoxFile2.Text;
+                if (name == null || name.Length == 0) {
+                    Utils.Utils.errMsg("File 2 is not defined");
+                    return;
+                }
+                if (!File.Exists(name)) {
+                    Utils.Utils.errMsg(name + " does not exist");
+                    return;
+                }
+                params2.Clear();
+                paramsCur = params2;
+                processFile(name, name, print);
+            }
+        }
+
         /// <summary>
         /// Compares the two files and displays the output.
         /// </summary>
         private void compare() {
-            // Rerun getting params for both files
-            params1.Clear();
-            paramsCur = params1;
-            processFile(fileName1, false);
+            // Process 1
+            process1(false);
             if (params1.Count == 0) {
-                Utils.Utils.errMsg("Did not get params for File 1");
+                Utils.Utils.errMsg("Did not get params for Brush 1");
                 return;
             }
-            params2.Clear();
-            paramsCur = params2;
-            processFile(fileName2, false);
+            // Process 2
+            process2(false);
             if (params2.Count == 0) {
-                Utils.Utils.errMsg("Did not get params for File 2");
+                Utils.Utils.errMsg("Did not get params for Brush 2");
                 return;
             }
-            textBoxInfo.Text = "1: " + fileName1 + NL;
-            textBoxInfo.AppendText("2: " + fileName2 + NL + NL);
+
+            // Write heading to textBoxInfo
+            textBoxInfo.Text = "1: ";
+            if (checkBoxBundle1.Checked) {
+                textBoxInfo.AppendText(textBoxBundle1.Text + NL
+                    + "    Brush: " + textBoxBrush1.Text + NL + NL);
+            } else {
+                textBoxInfo.AppendText(textBoxFile1.Text + NL + NL);
+            }
+            textBoxInfo.AppendText("2: ");
+            if (checkBoxBundle2.Checked) {
+                textBoxInfo.AppendText(textBoxBundle2.Text + NL
+                    + "    Brush: " + textBoxBrush2.Text + NL + NL);
+            } else {
+                textBoxInfo.AppendText(textBoxFile2.Text + NL + NL);
+            }
 
             // Look for items in 2 that are in 1
             bool found;
@@ -426,83 +566,88 @@ namespace KritaBrushInfo {
             }
         }
 
-        private void readFile(int n) {
-            if (n < 1 || n > 2) {
-                Utils.Utils.errMsg("Invalid File number: File " + n);
-                return;
-            }
+        private void getFileName(FileType type) {
             OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "Krita Presets|*.kpp";
-            dlg.Title = "Select a Preset File" + "(" + n + ")";
+            dlg.Title = "Select a File" + " (" + type + ")";
+            string fileName = "";
             // Set initial directory
-            switch (n) {
-                case 1:
-                    if (File.Exists(fileName1)) {
-                        dlg.FileName = fileName1;
-                        dlg.InitialDirectory = Path.GetDirectoryName(fileName1);
-                    }
+            switch (type) {
+                case FileType.File1:
+                    dlg.Filter = "Krita Presets|*.kpp";
+                    fileName = textBoxFile1.Text;
                     break;
-                case 2:
-                    if (File.Exists(fileName2)) {
-                        dlg.FileName = fileName2;
-                        dlg.InitialDirectory = Path.GetDirectoryName(fileName2);
-                    }
+                case FileType.File2:
+                    dlg.Filter = "Krita Presets|*.kpp";
+                    fileName = textBoxFile2.Text;
                     break;
+                case FileType.Bundle1:
+                    dlg.Filter = "Krita Bundles|*.bundle";
+                    fileName = textBoxBundle1.Text;
+                    break;
+                case FileType.Bundle2:
+                    dlg.Filter = "Krita Bundles|*.bundle";
+                    fileName = textBoxBundle2.Text;
+                    break;
+            }
+            if (File.Exists(fileName)) {
+                dlg.FileName = fileName;
+                dlg.InitialDirectory = Path.GetDirectoryName(fileName);
             }
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                switch (n) {
-                    case 1:
-                        fileName1 = dlg.FileName;
-                        break;
-                    case 2:
-                        fileName2 = dlg.FileName;
-                        break;
-                }
-                resetFilenames();
+                resetFileName(type, dlg.FileName);
             }
-
         }
 
-        private void resetFilenames() {
-            textBoxFile1.Text = fileName1;
-            textBoxFile2.Text = fileName2;
-            Properties.Settings.Default.FileName1 = fileName1;
-            Properties.Settings.Default.FileName2 = fileName2;
+        private void resetFileName(FileType type, string name) {
+            switch (type) {
+                case FileType.File1:
+                    textBoxFile1.Text = name;
+                    Properties.Settings.Default.FileName1 = name;
+                    break;
+                case FileType.File2:
+                    textBoxFile2.Text = name;
+                    Properties.Settings.Default.FileName2 = name;
+                    break;
+                case FileType.Bundle1:
+                    textBoxBundle1.Text = name;
+                    Properties.Settings.Default.BundleName1 = name;
+                    break;
+                case FileType.Bundle2:
+                    textBoxBundle2.Text = name;
+                    Properties.Settings.Default.BundleName2 = name;
+                    break;
+                case FileType.Brush1:
+                    textBoxBrush1.Text = name;
+                    Properties.Settings.Default.BrushName1 = name;
+                    break;
+                case FileType.Brush2:
+                    textBoxBrush2.Text = name;
+                    Properties.Settings.Default.BrushName2 = name;
+                    break;
+            }
             Properties.Settings.Default.Save();
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e) {
+            Properties.Settings.Default.FileName1 = textBoxFile1.Text;
+            Properties.Settings.Default.FileName2 = textBoxFile2.Text;
+            Properties.Settings.Default.BundleName1 = textBoxBundle1.Text;
+            Properties.Settings.Default.BundleName2 = textBoxBundle2.Text;
+            Properties.Settings.Default.BrushName1 = textBoxBrush1.Text;
+            Properties.Settings.Default.BrushName2 = textBoxBrush2.Text;
             Properties.Settings.Default.ReorderAttributes = checkBoxReorderAttr.Checked;
             Properties.Settings.Default.PrintRawXml = checkBoxPrintRaw.Checked;
+            Properties.Settings.Default.UseBundle1 = checkBoxBundle1.Checked;
+            Properties.Settings.Default.UseBundle2 = checkBoxBundle2.Checked;
             Properties.Settings.Default.Save();
         }
 
         private void OnProcess1Click(object sender, EventArgs e) {
-            if (fileName1 == null || fileName1.Length == 0) {
-                Utils.Utils.errMsg("File 1 is not defined");
-                return;
-            }
-            if (!File.Exists(fileName1)) {
-                Utils.Utils.errMsg(fileName1 + " does not exist");
-                return;
-            }
-            params1.Clear();
-            paramsCur = params1;
-            processFile(fileName1, true);
+            process1(true);
         }
 
         private void OnProcess2Click(object sender, EventArgs e) {
-            if (fileName2 == null || fileName2.Length == 0) {
-                Utils.Utils.errMsg("File 2 is not defined");
-                return;
-            }
-            if (!File.Exists(fileName2)) {
-                Utils.Utils.errMsg(fileName2 + " does not exist");
-                return;
-            }
-            params1.Clear();
-            paramsCur = params1;
-            processFile(fileName2, true);
+            process2(true);
         }
 
         private void OnCompareClick(object sender, EventArgs e) {
@@ -533,7 +678,6 @@ namespace KritaBrushInfo {
             } else {
                 preferencesDlg.Visible = true;
             }
-
         }
 
         private void OnAboutClick(object sender, EventArgs e) {
@@ -552,11 +696,63 @@ namespace KritaBrushInfo {
         }
 
         private void OnBrowseFile1Click(object sender, EventArgs e) {
-            readFile(1);
+            getFileName(FileType.File1);
+        }
+
+        private void OnBrowseFile2Click(object sender, EventArgs e) {
+            getFileName(FileType.File2);
+        }
+
+        private void OnBrowseBundle1Click(object sender, EventArgs e) {
+            getFileName(FileType.Bundle1);
+        }
+
+        private void OnBrowseBundle2Click(object sender, EventArgs e) {
+            getFileName(FileType.Bundle2);
         }
 
         private void OnBrowseBrush1Click(object sender, EventArgs e) {
-            MessageBox.Show("OnBrowseBrush1Click");
+            string bundleName = textBoxBundle1.Text;
+            if (bundleName == null || bundleName.Length == 0) {
+                Utils.Utils.errMsg("Bundle 1 is not defined");
+                return;
+            }
+            if(!File.Exists(bundleName)) {
+                Utils.Utils.errMsg("Bundle 1 does not exist");
+                return;
+            }
+            BrushesInBundleDialog dlg = new BrushesInBundleDialog(bundleName);
+            // Create, show, or set visible the preferences dialog as appropriate
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                if (dlg.SelectedBrush != null) {
+                    textBoxBrush1.Text = dlg.SelectedBrush;
+                    textBoxBundle1.Text = dlg.Bundle;
+                } else {
+                    Utils.Utils.errMsg("No items selected");
+                }
+            }
+        }
+
+        private void OnBrowseBrush2Click(object sender, EventArgs e) {
+            string bundleName = textBoxBundle2.Text;
+            if (bundleName == null || bundleName.Length == 0) {
+                Utils.Utils.errMsg("Bundle 2 is not defined");
+                return;
+            }
+            if (!File.Exists(bundleName)) {
+                Utils.Utils.errMsg("Bundle 2 does not exist");
+                return;
+            }
+            BrushesInBundleDialog dlg = new BrushesInBundleDialog(bundleName);
+            // Create, show, or set visible the preferences dialog as appropriate
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                if (dlg.SelectedBrush != null) {
+                    textBoxBrush2.Text = dlg.SelectedBrush;
+                    textBoxBundle2.Text = dlg.Bundle;
+                } else {
+                    Utils.Utils.errMsg("No items selected");
+                }
+            }
         }
 
         private void OnBundle2CheckStateChanged(object sender, EventArgs e) {
@@ -569,13 +765,6 @@ namespace KritaBrushInfo {
             }
         }
 
-        private void OnBrowseFile2Click(object sender, EventArgs e) {
-            readFile(2);
-        }
-
-        private void OnBrowseBrush2Click(object sender, EventArgs e) {
-            MessageBox.Show("OnBrowseBrush2Click");
-        }
     }
 
 }

@@ -50,6 +50,54 @@ namespace KritaBrushInfo.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BundleName1 {
+            get {
+                return ((string)(this["BundleName1"]));
+            }
+            set {
+                this["BundleName1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BundleName2 {
+            get {
+                return ((string)(this["BundleName2"]));
+            }
+            set {
+                this["BundleName2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BrushName1 {
+            get {
+                return ((string)(this["BrushName1"]));
+            }
+            set {
+                this["BrushName1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BrushName2 {
+            get {
+                return ((string)(this["BrushName2"]));
+            }
+            set {
+                this["BrushName2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ExifToolExe {
             get {
                 return ((string)(this["ExifToolExe"]));
@@ -80,6 +128,30 @@ namespace KritaBrushInfo.Properties {
             }
             set {
                 this["ReorderAttributes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseBundle1 {
+            get {
+                return ((bool)(this["UseBundle1"]));
+            }
+            set {
+                this["UseBundle1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseBundle2 {
+            get {
+                return ((bool)(this["UseBundle2"]));
+            }
+            set {
+                this["UseBundle2"] = value;
             }
         }
     }
