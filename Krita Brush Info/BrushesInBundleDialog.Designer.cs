@@ -77,7 +77,7 @@
             this.tableLayoutPanelBundle.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelBundle.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelBundle.Size = new System.Drawing.Size(1056, 48);
-            this.tableLayoutPanelBundle.TabIndex = 6;
+            this.tableLayoutPanelBundle.TabIndex = 1;
             // 
             // labelBundle
             // 
@@ -88,7 +88,7 @@
             this.labelBundle.Location = new System.Drawing.Point(3, 0);
             this.labelBundle.Name = "labelBundle";
             this.labelBundle.Size = new System.Drawing.Size(113, 48);
-            this.labelBundle.TabIndex = 1;
+            this.labelBundle.TabIndex = 0;
             this.labelBundle.Text = "Bundle:";
             this.labelBundle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -98,7 +98,7 @@
             this.textBoxBundle.Location = new System.Drawing.Point(122, 3);
             this.textBoxBundle.Name = "textBoxBundle";
             this.textBoxBundle.Size = new System.Drawing.Size(806, 38);
-            this.textBoxBundle.TabIndex = 0;
+            this.textBoxBundle.TabIndex = 1;
             // 
             // buttonBundleBrowse
             // 
@@ -109,7 +109,7 @@
             this.buttonBundleBrowse.Location = new System.Drawing.Point(934, 3);
             this.buttonBundleBrowse.Name = "buttonBundleBrowse";
             this.buttonBundleBrowse.Size = new System.Drawing.Size(119, 42);
-            this.buttonBundleBrowse.TabIndex = 1;
+            this.buttonBundleBrowse.TabIndex = 2;
             this.buttonBundleBrowse.Text = "Browse";
             this.buttonBundleBrowse.UseVisualStyleBackColor = false;
             this.buttonBundleBrowse.Click += new System.EventHandler(this.OnBrowseClick);
@@ -122,7 +122,7 @@
             this.listBoxBrushes.Location = new System.Drawing.Point(3, 57);
             this.listBoxBrushes.Name = "listBoxBrushes";
             this.listBoxBrushes.Size = new System.Drawing.Size(1056, 336);
-            this.listBoxBrushes.TabIndex = 8;
+            this.listBoxBrushes.TabIndex = 2;
             // 
             // flowLayoutPanelButtons
             // 
@@ -136,7 +136,7 @@
             this.flowLayoutPanelButtons.Location = new System.Drawing.Point(336, 399);
             this.flowLayoutPanelButtons.Name = "flowLayoutPanelButtons";
             this.flowLayoutPanelButtons.Size = new System.Drawing.Size(390, 48);
-            this.flowLayoutPanelButtons.TabIndex = 7;
+            this.flowLayoutPanelButtons.TabIndex = 0;
             this.flowLayoutPanelButtons.WrapContents = false;
             // 
             // buttonFind
@@ -147,7 +147,7 @@
             this.buttonFind.Location = new System.Drawing.Point(3, 3);
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(192, 42);
-            this.buttonFind.TabIndex = 0;
+            this.buttonFind.TabIndex = 2;
             this.buttonFind.Text = "Find Brushes";
             this.buttonFind.UseVisualStyleBackColor = true;
             this.buttonFind.Click += new System.EventHandler(this.OnFindClick);
@@ -173,7 +173,7 @@
             this.buttonOk.Location = new System.Drawing.Point(321, 3);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(66, 42);
-            this.buttonOk.TabIndex = 2;
+            this.buttonOk.TabIndex = 0;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.OnOkClick);
