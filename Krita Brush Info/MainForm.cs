@@ -35,6 +35,10 @@ namespace KritaBrushInfo {
 
             InitializeComponent();
 
+            // Set the correct panel by ing  the BundleCheckState handler
+            OnBundle1CheckStateChanged(null, null);
+            OnBundle2CheckStateChanged(null, null);
+
             textBoxFile1.Text = fileName1;
             textBoxFile2.Text = fileName2;
             checkBoxReorderAttr.Checked = Properties.Settings.Default.ReorderAttributes;
@@ -509,14 +513,6 @@ namespace KritaBrushInfo {
             Close();
         }
 
-        private void OnBrowseFile1Click(object sender, EventArgs e) {
-            readFile(1);
-        }
-
-        private void OnBrowseFile2Click(object sender, EventArgs e) {
-            readFile(2);
-        }
-
         private void onOverviewClick(object sender, EventArgs e) {
             // Create, show, or set visible the overview dialog as appropriate
             if (overviewDlg == null) {
@@ -545,5 +541,41 @@ namespace KritaBrushInfo {
             dlg.ShowDialog();
         }
 
+        private void OnBundle1CheckStateChanged(object sender, EventArgs e) {
+            if (checkBoxBundle1.Checked) {
+                tableLayoutPanelFile1.Visible = false;
+                tableLayoutPanelBundle1.Visible = true;
+            } else {
+                tableLayoutPanelFile1.Visible = true;
+                tableLayoutPanelBundle1.Visible = false;
+            }
+        }
+
+        private void OnBrowseFile1Click(object sender, EventArgs e) {
+            readFile(1);
+        }
+
+        private void OnBrowseBrush1Click(object sender, EventArgs e) {
+            MessageBox.Show("OnBrowseBrush1Click");
+        }
+
+        private void OnBundle2CheckStateChanged(object sender, EventArgs e) {
+            if (checkBoxBundle2.Checked) {
+                tableLayoutPanelFile2.Visible = false;
+                tableLayoutPanelBundle2.Visible = true;
+            } else {
+                tableLayoutPanelFile2.Visible = true;
+                tableLayoutPanelBundle2.Visible = false;
+            }
+        }
+
+        private void OnBrowseFile2Click(object sender, EventArgs e) {
+            readFile(2);
+        }
+
+        private void OnBrowseBrush2Click(object sender, EventArgs e) {
+            MessageBox.Show("OnBrowseBrush2Click");
+        }
     }
+
 }
