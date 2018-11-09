@@ -389,7 +389,7 @@
             this.tableLayoutPanelFile2.Name = "tableLayoutPanelFile2";
             this.tableLayoutPanelFile2.RowCount = 1;
             this.tableLayoutPanelFile2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelFile2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 105F));
+            this.tableLayoutPanelFile2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
             this.tableLayoutPanelFile2.Size = new System.Drawing.Size(1350, 46);
             this.tableLayoutPanelFile2.TabIndex = 3;
             // 
@@ -687,7 +687,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
-            this.Text = "1";
+            this.Text = "Ktita Brush Info";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.tableLayoutPanelTop.ResumeLayout(false);
             this.tableLayoutPanelTop.PerformLayout();
