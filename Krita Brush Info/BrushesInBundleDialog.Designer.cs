@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BrushesInBundleDialog));
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelBundle = new System.Windows.Forms.TableLayoutPanel();
@@ -34,6 +35,7 @@
             this.buttonFind = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOk = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanelTop.SuspendLayout();
             this.tableLayoutPanelBundle.SuspendLayout();
             this.flowLayoutPanelButtons.SuspendLayout();
@@ -91,6 +93,7 @@
             this.labelBundle.TabIndex = 0;
             this.labelBundle.Text = "Bundle:";
             this.labelBundle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelBundle, "Bundle file.");
             // 
             // textBoxBundle
             // 
@@ -99,6 +102,7 @@
             this.textBoxBundle.Name = "textBoxBundle";
             this.textBoxBundle.Size = new System.Drawing.Size(806, 38);
             this.textBoxBundle.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textBoxBundle, "Bundle file.");
             // 
             // buttonBundleBrowse
             // 
@@ -111,6 +115,7 @@
             this.buttonBundleBrowse.Size = new System.Drawing.Size(119, 42);
             this.buttonBundleBrowse.TabIndex = 2;
             this.buttonBundleBrowse.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBundleBrowse, "Browse for a bundle file.");
             this.buttonBundleBrowse.UseVisualStyleBackColor = false;
             this.buttonBundleBrowse.Click += new System.EventHandler(this.OnBrowseClick);
             // 
@@ -149,6 +154,7 @@
             this.buttonFind.Size = new System.Drawing.Size(192, 42);
             this.buttonFind.TabIndex = 2;
             this.buttonFind.Text = "Find Brushes";
+            this.toolTip.SetToolTip(this.buttonFind, "Get or refresh the brushes in the bundle.");
             this.buttonFind.UseVisualStyleBackColor = true;
             this.buttonFind.Click += new System.EventHandler(this.OnFindClick);
             // 
@@ -162,6 +168,7 @@
             this.buttonCancel.Size = new System.Drawing.Size(114, 42);
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Cancel";
+            this.toolTip.SetToolTip(this.buttonCancel, "Cancel without saving.");
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.OnCancelClick);
             // 
@@ -175,6 +182,7 @@
             this.buttonOk.Size = new System.Drawing.Size(66, 42);
             this.buttonOk.TabIndex = 0;
             this.buttonOk.Text = "OK";
+            this.toolTip.SetToolTip(this.buttonOk, "Quit and svae the values.");
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.OnOkClick);
             // 
@@ -210,5 +218,6 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.ListBox listBoxBrushes;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

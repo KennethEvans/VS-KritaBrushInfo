@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanelTop = new System.Windows.Forms.TableLayoutPanel();
             this.groupBoxExifTool = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanelExifExe = new System.Windows.Forms.TableLayoutPanel();
@@ -33,6 +34,7 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonReset = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanelTop.SuspendLayout();
             this.groupBoxExifTool.SuspendLayout();
             this.tableLayoutPanelExifExe.SuspendLayout();
@@ -101,6 +103,7 @@
             this.labelExifExe.TabIndex = 1;
             this.labelExifExe.Text = "ExifTool .exe:";
             this.labelExifExe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelExifExe, "The ExifToo executable.  Use  exiftool.exe, not exiftool(-k).exe.");
             // 
             // textBoxExifExe
             // 
@@ -121,6 +124,7 @@
             this.buttonBrowseExifExe.Size = new System.Drawing.Size(119, 42);
             this.buttonBrowseExifExe.TabIndex = 1;
             this.buttonBrowseExifExe.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBrowseExifExe, "Browse for the ExifTool executable.");
             this.buttonBrowseExifExe.UseVisualStyleBackColor = false;
             this.buttonBrowseExifExe.Click += new System.EventHandler(this.OnBrowseExifExeClick);
             // 
@@ -149,6 +153,7 @@
             this.buttonCancel.Size = new System.Drawing.Size(114, 42);
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Cancel";
+            this.toolTip.SetToolTip(this.buttonCancel, "Cancel without saving.");
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.OnCancelButtonClicked);
             // 
@@ -162,6 +167,7 @@
             this.buttonReset.Size = new System.Drawing.Size(99, 42);
             this.buttonReset.TabIndex = 1;
             this.buttonReset.Text = "Reset";
+            this.toolTip.SetToolTip(this.buttonReset, "Rest ti the stored preferences.");
             this.buttonReset.UseVisualStyleBackColor = true;
             this.buttonReset.Click += new System.EventHandler(this.OnResetButtonClicked);
             // 
@@ -175,6 +181,7 @@
             this.buttonSave.Size = new System.Drawing.Size(90, 42);
             this.buttonSave.TabIndex = 0;
             this.buttonSave.Text = "Save";
+            this.toolTip.SetToolTip(this.buttonSave, "Save the values as the new Preferences.");
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.OnSaveButtonClicked);
             // 
@@ -211,5 +218,6 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonReset;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

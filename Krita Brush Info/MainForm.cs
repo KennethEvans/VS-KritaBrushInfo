@@ -685,16 +685,6 @@ namespace KritaBrushInfo {
             dlg.ShowDialog();
         }
 
-        private void OnBundle1CheckStateChanged(object sender, EventArgs e) {
-            if (checkBoxBundle1.Checked) {
-                tableLayoutPanelFile1.Visible = false;
-                tableLayoutPanelBundle1.Visible = true;
-            } else {
-                tableLayoutPanelFile1.Visible = true;
-                tableLayoutPanelBundle1.Visible = false;
-            }
-        }
-
         private void OnBrowseFile1Click(object sender, EventArgs e) {
             getFileName(FileType.File1);
         }
@@ -717,7 +707,7 @@ namespace KritaBrushInfo {
                 Utils.Utils.errMsg("Bundle 1 is not defined");
                 return;
             }
-            if(!File.Exists(bundleName)) {
+            if (!File.Exists(bundleName)) {
                 Utils.Utils.errMsg("Bundle 1 does not exist");
                 return;
             }
@@ -755,19 +745,29 @@ namespace KritaBrushInfo {
             }
         }
 
+        private void OnBundle1CheckStateChanged(object sender, EventArgs e) {
+            if (checkBoxBundle1.Checked) {
+                tableLayoutPanelFile1.Visible = false;
+                tableLayoutPanelBundle1.Visible = true;
+                groupBoxBrush1.Text = "Brush 1 [Bundle]";
+            } else {
+                tableLayoutPanelFile1.Visible = true;
+                tableLayoutPanelBundle1.Visible = false;
+                groupBoxBrush1.Text = "Brush 2 [File]";
+            }
+        }
+
         private void OnBundle2CheckStateChanged(object sender, EventArgs e) {
             if (checkBoxBundle2.Checked) {
                 tableLayoutPanelFile2.Visible = false;
                 tableLayoutPanelBundle2.Visible = true;
+                groupBoxBrush2.Text = "Brush 2 [Bundle]";
             } else {
                 tableLayoutPanelFile2.Visible = true;
                 tableLayoutPanelBundle2.Visible = false;
+                groupBoxBrush2.Text = "Brush 2 [File]";
             }
         }
 
-        private void textBoxBundle2_TextChanged(object sender, EventArgs e) {
-
-        }
     }
-
 }
