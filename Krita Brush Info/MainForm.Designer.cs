@@ -68,6 +68,7 @@
             this.buttonProcess2 = new System.Windows.Forms.Button();
             this.buttonCompare = new System.Windows.Forms.Button();
             this.buttonQuit = new System.Windows.Forms.Button();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanelTop.SuspendLayout();
             this.groupBoxBrush1.SuspendLayout();
             this.tableLayoutPanelGroupBoxFile1.SuspendLayout();
@@ -174,6 +175,7 @@
             this.labelFile1.TabIndex = 0;
             this.labelFile1.Text = "File 1:";
             this.labelFile1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelFile1, "Brush file 1");
             // 
             // textBoxFile1
             // 
@@ -184,6 +186,7 @@
             this.textBoxFile1.Name = "textBoxFile1";
             this.textBoxFile1.Size = new System.Drawing.Size(1120, 38);
             this.textBoxFile1.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textBoxFile1, "Brush file 1");
             // 
             // contextMenuStrip
             // 
@@ -234,6 +237,7 @@
             this.buttonFileBrowse1.Size = new System.Drawing.Size(119, 42);
             this.buttonFileBrowse1.TabIndex = 2;
             this.buttonFileBrowse1.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonFileBrowse1, "Browse for brush file 1");
             this.buttonFileBrowse1.UseVisualStyleBackColor = false;
             this.buttonFileBrowse1.Click += new System.EventHandler(this.OnBrowseFile1Click);
             // 
@@ -249,9 +253,9 @@
             this.tableLayoutPanelBundle1.Controls.Add(this.labelBundle1, 0, 0);
             this.tableLayoutPanelBundle1.Controls.Add(this.textBoxBundle1, 1, 0);
             this.tableLayoutPanelBundle1.Controls.Add(this.buttonBundleBrowse1, 2, 0);
-            this.tableLayoutPanelBundle1.Controls.Add(this.labelBundleFile1, 0, 1);
             this.tableLayoutPanelBundle1.Controls.Add(this.textBoxBrush1, 1, 1);
             this.tableLayoutPanelBundle1.Controls.Add(this.buttonBrush1, 2, 1);
+            this.tableLayoutPanelBundle1.Controls.Add(this.labelBundleFile1, 0, 1);
             this.tableLayoutPanelBundle1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelBundle1.Location = new System.Drawing.Point(3, 52);
             this.tableLayoutPanelBundle1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -274,6 +278,7 @@
             this.labelBundle1.TabIndex = 0;
             this.labelBundle1.Text = "Bundle 1:";
             this.labelBundle1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelBundle1, "Bundle 1 file");
             // 
             // textBoxBundle1
             // 
@@ -284,6 +289,7 @@
             this.textBoxBundle1.Name = "textBoxBundle1";
             this.textBoxBundle1.Size = new System.Drawing.Size(1023, 38);
             this.textBoxBundle1.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textBoxBundle1, "Bundle 1 file");
             // 
             // buttonBundleBrowse1
             // 
@@ -297,6 +303,7 @@
             this.buttonBundleBrowse1.Size = new System.Drawing.Size(119, 42);
             this.buttonBundleBrowse1.TabIndex = 2;
             this.buttonBundleBrowse1.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBundleBrowse1, "Browse for bundle 1");
             this.buttonBundleBrowse1.UseVisualStyleBackColor = false;
             this.buttonBundleBrowse1.Click += new System.EventHandler(this.OnBrowseBundle1Click);
             // 
@@ -312,6 +319,7 @@
             this.labelBundleFile1.TabIndex = 3;
             this.labelBundleFile1.Text = "Bundle File 1:";
             this.labelBundleFile1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelBundleFile1, "A brush in bundle 1");
             // 
             // textBoxBrush1
             // 
@@ -322,6 +330,7 @@
             this.textBoxBrush1.Name = "textBoxBrush1";
             this.textBoxBrush1.Size = new System.Drawing.Size(1023, 38);
             this.textBoxBrush1.TabIndex = 4;
+            this.toolTip.SetToolTip(this.textBoxBrush1, "A brush in bundle 1");
             // 
             // buttonBrush1
             // 
@@ -335,6 +344,7 @@
             this.buttonBrush1.Size = new System.Drawing.Size(119, 42);
             this.buttonBrush1.TabIndex = 5;
             this.buttonBrush1.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBrush1, "Browse the brushes in bundle 1");
             this.buttonBrush1.UseVisualStyleBackColor = false;
             this.buttonBrush1.Click += new System.EventHandler(this.OnBrowseBrush1Click);
             // 
@@ -405,6 +415,7 @@
             this.labelFile2.TabIndex = 0;
             this.labelFile2.Text = "File 2:";
             this.labelFile2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelFile2, "Brush file 2");
             // 
             // textBoxFile2
             // 
@@ -414,6 +425,7 @@
             this.textBoxFile2.Name = "textBoxFile2";
             this.textBoxFile2.Size = new System.Drawing.Size(1120, 38);
             this.textBoxFile2.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textBoxFile2, "Brush file 2");
             // 
             // buttonBrowse2
             // 
@@ -427,6 +439,7 @@
             this.buttonBrowse2.Size = new System.Drawing.Size(119, 42);
             this.buttonBrowse2.TabIndex = 2;
             this.buttonBrowse2.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBrowse2, "Browse for brush file 2");
             this.buttonBrowse2.UseVisualStyleBackColor = false;
             this.buttonBrowse2.Click += new System.EventHandler(this.OnBrowseFile2Click);
             // 
@@ -466,6 +479,7 @@
             this.labelBundle2.TabIndex = 0;
             this.labelBundle2.Text = "Bundle 2:";
             this.labelBundle2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelBundle2, "Bundle 2 file");
             // 
             // textBoxBundle2
             // 
@@ -476,6 +490,8 @@
             this.textBoxBundle2.Name = "textBoxBundle2";
             this.textBoxBundle2.Size = new System.Drawing.Size(1023, 38);
             this.textBoxBundle2.TabIndex = 1;
+            this.toolTip.SetToolTip(this.textBoxBundle2, "Bundle 2 file");
+            this.textBoxBundle2.TextChanged += new System.EventHandler(this.textBoxBundle2_TextChanged);
             // 
             // buttonBrowseBundle2
             // 
@@ -489,6 +505,7 @@
             this.buttonBrowseBundle2.Size = new System.Drawing.Size(119, 42);
             this.buttonBrowseBundle2.TabIndex = 2;
             this.buttonBrowseBundle2.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBrowseBundle2, "Browse for bundle 2");
             this.buttonBrowseBundle2.UseVisualStyleBackColor = false;
             this.buttonBrowseBundle2.Click += new System.EventHandler(this.OnBrowseBundle2Click);
             // 
@@ -504,6 +521,7 @@
             this.labelBundleBrush2.TabIndex = 3;
             this.labelBundleBrush2.Text = "Bundle File 2:";
             this.labelBundleBrush2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelBundleBrush2, "A brush in bundle 2");
             // 
             // textBoxBrush2
             // 
@@ -514,6 +532,7 @@
             this.textBoxBrush2.Name = "textBoxBrush2";
             this.textBoxBrush2.Size = new System.Drawing.Size(1023, 38);
             this.textBoxBrush2.TabIndex = 4;
+            this.toolTip.SetToolTip(this.textBoxBrush2, "A brush in bundle 2");
             // 
             // buttonBrowseBrush2
             // 
@@ -527,6 +546,7 @@
             this.buttonBrowseBrush2.Size = new System.Drawing.Size(119, 42);
             this.buttonBrowseBrush2.TabIndex = 5;
             this.buttonBrowseBrush2.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonBrowseBrush2, "Browse the brushes in bundle 2");
             this.buttonBrowseBrush2.UseVisualStyleBackColor = false;
             this.buttonBrowseBrush2.Click += new System.EventHandler(this.OnBrowseBrush2Click);
             // 
@@ -555,6 +575,7 @@
             this.checkBoxReorderAttr.Size = new System.Drawing.Size(469, 36);
             this.checkBoxReorderAttr.TabIndex = 1;
             this.checkBoxReorderAttr.Text = "Reorder Attributes Alphabetically";
+            this.toolTip.SetToolTip(this.checkBoxReorderAttr, "Reorder attributes alphabetically (for compare purposes)");
             this.checkBoxReorderAttr.UseVisualStyleBackColor = true;
             // 
             // checkBoxPrintRaw
@@ -566,6 +587,7 @@
             this.checkBoxPrintRaw.Size = new System.Drawing.Size(240, 36);
             this.checkBoxPrintRaw.TabIndex = 1;
             this.checkBoxPrintRaw.Text = "Print Raw XML";
+            this.toolTip.SetToolTip(this.checkBoxPrintRaw, "Print the formatted XML for the entire Preset element");
             this.checkBoxPrintRaw.UseVisualStyleBackColor = true;
             // 
             // checkBoxBundle1
@@ -577,6 +599,7 @@
             this.checkBoxBundle1.Size = new System.Drawing.Size(263, 36);
             this.checkBoxBundle1.TabIndex = 2;
             this.checkBoxBundle1.Text = "Use Bundle for 1";
+            this.toolTip.SetToolTip(this.checkBoxBundle1, "Use a bundle rather than a file for brush 1");
             this.checkBoxBundle1.UseVisualStyleBackColor = true;
             this.checkBoxBundle1.CheckStateChanged += new System.EventHandler(this.OnBundle1CheckStateChanged);
             // 
@@ -589,6 +612,7 @@
             this.checkBoxBundle2.Size = new System.Drawing.Size(263, 36);
             this.checkBoxBundle2.TabIndex = 3;
             this.checkBoxBundle2.Text = "Use Bundle for 2";
+            this.toolTip.SetToolTip(this.checkBoxBundle2, "Use a bundle rather than a file for brush 2");
             this.checkBoxBundle2.UseVisualStyleBackColor = true;
             this.checkBoxBundle2.CheckStateChanged += new System.EventHandler(this.OnBundle2CheckStateChanged);
             // 
@@ -632,6 +656,7 @@
             this.buttonProcess1.Size = new System.Drawing.Size(231, 42);
             this.buttonProcess1.TabIndex = 0;
             this.buttonProcess1.Text = "Process Brush 1";
+            this.toolTip.SetToolTip(this.buttonProcess1, "Process brush 1");
             this.buttonProcess1.UseVisualStyleBackColor = true;
             this.buttonProcess1.Click += new System.EventHandler(this.OnProcess1Click);
             // 
@@ -646,6 +671,7 @@
             this.buttonProcess2.Size = new System.Drawing.Size(231, 42);
             this.buttonProcess2.TabIndex = 1;
             this.buttonProcess2.Text = "Process Brush 2";
+            this.toolTip.SetToolTip(this.buttonProcess2, "Process brush 2");
             this.buttonProcess2.UseVisualStyleBackColor = true;
             this.buttonProcess2.Click += new System.EventHandler(this.OnProcess2Click);
             // 
@@ -660,6 +686,7 @@
             this.buttonCompare.Size = new System.Drawing.Size(141, 42);
             this.buttonCompare.TabIndex = 2;
             this.buttonCompare.Text = "Compare";
+            this.toolTip.SetToolTip(this.buttonCompare, "Compare the brushes, listing differences");
             this.buttonCompare.UseVisualStyleBackColor = true;
             this.buttonCompare.Click += new System.EventHandler(this.OnCompareClick);
             // 
@@ -674,6 +701,7 @@
             this.buttonQuit.Size = new System.Drawing.Size(78, 42);
             this.buttonQuit.TabIndex = 3;
             this.buttonQuit.Text = "Quit";
+            this.toolTip.SetToolTip(this.buttonQuit, "Quit the application");
             this.buttonQuit.UseVisualStyleBackColor = true;
             this.buttonQuit.Click += new System.EventHandler(this.OnQuitCick);
             // 
@@ -762,6 +790,7 @@
         private System.Windows.Forms.Label labelBundleFile1;
         private System.Windows.Forms.TextBox textBoxBrush1;
         private System.Windows.Forms.Button buttonBrush1;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
 

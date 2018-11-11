@@ -765,6 +765,9 @@ namespace KritaBrushInfo {
             }
         }
 
+        private void textBoxBundle2_TextChanged(object sender, EventArgs e) {
+
+        }
     }
 
 }
