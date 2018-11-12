@@ -24,7 +24,11 @@ namespace KritaBrushInfo {
 
         private List<KritaPresetParam> params1 = new List<KritaPresetParam>();
         private List<KritaPresetParam> params2 = new List<KritaPresetParam>();
+        private List<string> attributes1 = new List<string>();
+        private List<string> attributes2 = new List<string>();
         private List<KritaPresetParam> paramsCur;
+        private List<string> attributesCur;
+        private FileType fileTypeCur;
 
         public MainForm() {
             InitializeComponent();
@@ -53,7 +57,8 @@ namespace KritaBrushInfo {
         /// <param name="print">Whether to print progress to the output TextBox.</param>
         private void processFile(string fileName, string displayName, bool print) {
             if (print) {
-                textBoxInfo.Text = displayName + NL + NL;
+                textBoxInfo.Clear();
+                printHeading(fileTypeCur);
             }
             // Get the preset text
             string presetText = getPresetTextFromFile(fileName);
@@ -83,6 +88,21 @@ namespace KritaBrushInfo {
 #endif
             // Calculate the KritaPresetParam's
             XDocument doc = XDocument.Parse(presetText);
+            XElement preset = doc.Element("Preset");
+            // Get the attributes of Preset
+            if (preset != null && preset.HasAttributes) {
+                IEnumerable<XAttribute> attributes = preset.Attributes();
+                foreach (XAttribute attribute in attributes) {
+                    attributesCur.Add(attribute.ToString());
+                }
+                attributesCur.Sort();
+                // Reset the heading
+                if(print) {
+                    textBoxInfo.Clear();
+                    printHeading(fileTypeCur);
+                }
+            }
+            // Get the param elements of Preset
             KritaPresetParam param = null;
             foreach (XElement element in doc.Descendants("param")) {
                 param = new KritaPresetParam(element);
@@ -402,6 +422,9 @@ namespace KritaBrushInfo {
                     }
                     params1.Clear();
                     paramsCur = params1;
+                    attributes1.Clear();
+                    attributesCur = attributes1;
+                    fileTypeCur = FileType.Bundle1;
                     processFile(tempFile, name + NL + "    Brush: " + brushName, true);
                 } catch (Exception ex) {
                     Utils.Utils.excMsg("Failed to find " + brushName, ex);
@@ -423,6 +446,9 @@ namespace KritaBrushInfo {
                 }
                 params1.Clear();
                 paramsCur = params1;
+                attributes1.Clear();
+                attributesCur = attributes1;
+                fileTypeCur = FileType.File1;
                 processFile(name, name, print);
             }
         }
@@ -461,6 +487,9 @@ namespace KritaBrushInfo {
                     }
                     params2.Clear();
                     paramsCur = params2;
+                    attributes2.Clear();
+                    attributesCur = attributes2;
+                    fileTypeCur = FileType.Bundle2;
                     processFile(tempFile, name + NL + "    Brush: " + brushName, true);
                 } catch (Exception ex) {
                     Utils.Utils.excMsg("Failed to find " + brushName, ex);
@@ -482,6 +511,9 @@ namespace KritaBrushInfo {
                 }
                 params2.Clear();
                 paramsCur = params2;
+                attributes2.Clear();
+                attributesCur = attributes2;
+                fileTypeCur = FileType.File2;
                 processFile(name, name, print);
             }
         }
@@ -506,19 +538,16 @@ namespace KritaBrushInfo {
             // Write heading to textBoxInfo
             textBoxInfo.Text = "1: ";
             if (checkBoxBundle1.Checked) {
-                textBoxInfo.AppendText(textBoxBundle1.Text + NL
-                    + "    Brush: " + textBoxBrush1.Text + NL + NL);
+                printHeading(FileType.Bundle1);
             } else {
-                textBoxInfo.AppendText(textBoxFile1.Text + NL + NL);
+                printHeading(FileType.File1);
             }
             textBoxInfo.AppendText("2: ");
             if (checkBoxBundle2.Checked) {
-                textBoxInfo.AppendText(textBoxBundle2.Text + NL
-                    + "    Brush: " + textBoxBrush2.Text + NL + NL);
+                printHeading(FileType.Bundle2);
             } else {
-                textBoxInfo.AppendText(textBoxFile2.Text + NL + NL);
+                printHeading(FileType.File2);
             }
-
             // Look for items in 2 that are in 1
             bool found;
             KritaPresetParam foundParam = null;
@@ -626,6 +655,42 @@ namespace KritaBrushInfo {
                     break;
             }
             Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Outputs a heading in testBoxInfo according to the type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private void printHeading(FileType type) {
+            List<string> attributes = null;
+
+            switch (type) {
+                case FileType.File1:
+                    attributes = attributes1;
+                    textBoxInfo.AppendText(textBoxFile1.Text + NL);
+                    break;
+                case FileType.File2:
+                    attributes = attributes2;
+                    textBoxInfo.AppendText(textBoxFile2.Text + NL);
+                    break;
+                case FileType.Bundle1:
+                    attributes = attributes1;
+                    textBoxInfo.AppendText(textBoxBundle1.Text + NL
+                        + "    Brush: " + textBoxBrush1.Text + NL);
+                    break;
+                case FileType.Bundle2:
+                    attributes = attributes2;
+                    textBoxInfo.AppendText(textBoxBundle2.Text + NL
+                        + "    Brush: " + textBoxBrush2.Text + NL);
+                    break;
+            }
+            if (attributes != null && attributes.Count > 0) {
+                foreach (string attribute in attributes) {
+                    textBoxInfo.AppendText("        " + attribute + NL);
+                }
+            }
+            textBoxInfo.AppendText(NL);
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e) {
