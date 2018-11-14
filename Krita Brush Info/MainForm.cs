@@ -57,12 +57,12 @@ namespace KritaBrushInfo {
         /// <param name="print">Whether to print progress to the output TextBox.</param>
         private void processFile(string fileName, string displayName, bool print) {
             if (print) {
-                textBoxInfo.Clear();
                 printHeading(fileTypeCur);
             }
             // Get the preset text
             string presetText = getPresetTextFromFile(fileName);
             if (presetText == null) {
+                Utils.Utils.errMsg("Failed to get Preset text");
                 textBoxInfo.AppendText("Failed to get Preset text" + NL);
                 return;
             }
@@ -388,7 +388,12 @@ namespace KritaBrushInfo {
             return info.ToString();
         }
 
+        /// <summary>
+        /// Processes Brush 1.
+        /// </summary>
+        /// <param name="print">Whether to write to textBoxInfo.</param>
         private void process1(bool print) {
+            textBoxInfo.Clear();
             String name = "";
             if (checkBoxBundle1.Checked) {
                 name = textBoxBundle1.Text;
@@ -425,7 +430,7 @@ namespace KritaBrushInfo {
                     attributes1.Clear();
                     attributesCur = attributes1;
                     fileTypeCur = FileType.Bundle1;
-                    processFile(tempFile, name + NL + "    Brush: " + brushName, true);
+                    processFile(tempFile, name + NL + "    Brush: " + brushName, print);
                 } catch (Exception ex) {
                     Utils.Utils.excMsg("Failed to find " + brushName, ex);
                     return;
@@ -453,7 +458,12 @@ namespace KritaBrushInfo {
             }
         }
 
+        /// <summary>
+        /// Processes Brush 2.
+        /// </summary>
+        /// <param name="print">Whether to write to textBoxInfo.</param>
         private void process2(bool print) {
+            textBoxInfo.Clear();
             String name = "";
             if (checkBoxBundle2.Checked) {
                 name = textBoxBundle2.Text;
@@ -490,7 +500,7 @@ namespace KritaBrushInfo {
                     attributes2.Clear();
                     attributesCur = attributes2;
                     fileTypeCur = FileType.Bundle2;
-                    processFile(tempFile, name + NL + "    Brush: " + brushName, true);
+                    processFile(tempFile, name + NL + "    Brush: " + brushName, print);
                 } catch (Exception ex) {
                     Utils.Utils.excMsg("Failed to find " + brushName, ex);
                     return;
