@@ -4,7 +4,7 @@ Krita Brush Info is a C# Windows application that reads Krita brush configuratio
 
 It can read .kpp brush preset files or get them from a .bundle resource bundle.
 
-See https://cdn.staticaly.com/gh/KennethEvans/VS-KritaBrushInfo/master/Krita%20Brush%20Info/Help/Overview.html
+See http://kenevans.net/opensource/KritaBrushInfo/Help/Overview.html
 
 **Installation**
 
