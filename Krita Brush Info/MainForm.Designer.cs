@@ -54,9 +54,9 @@
             this.labelBundle2 = new System.Windows.Forms.Label();
             this.textBoxBundle2 = new System.Windows.Forms.TextBox();
             this.buttonBrowseBundle2 = new System.Windows.Forms.Button();
-            this.labelBundleBrush2 = new System.Windows.Forms.Label();
             this.textBoxBrush2 = new System.Windows.Forms.TextBox();
             this.buttonBrowseBrush2 = new System.Windows.Forms.Button();
+            this.labelBundleBrush2 = new System.Windows.Forms.Label();
             this.flowLayoutCheckBoxes = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxReorderAttr = new System.Windows.Forms.CheckBox();
             this.checkBoxPrintRaw = new System.Windows.Forms.CheckBox();
@@ -508,20 +508,6 @@
             this.buttonBrowseBundle2.UseVisualStyleBackColor = false;
             this.buttonBrowseBundle2.Click += new System.EventHandler(this.OnBrowseBundle2Click);
             // 
-            // labelBundleBrush2
-            // 
-            this.labelBundleBrush2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelBundleBrush2.AutoSize = true;
-            this.labelBundleBrush2.BackColor = System.Drawing.SystemColors.Control;
-            this.labelBundleBrush2.Location = new System.Drawing.Point(3, 46);
-            this.labelBundleBrush2.Name = "labelBundleBrush2";
-            this.labelBundleBrush2.Size = new System.Drawing.Size(217, 46);
-            this.labelBundleBrush2.TabIndex = 3;
-            this.labelBundleBrush2.Text = "Bundle Brush 2:";
-            this.labelBundleBrush2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.labelBundleBrush2, "A brush in bundle 2.");
-            // 
             // textBoxBrush2
             // 
             this.textBoxBrush2.ContextMenuStrip = this.contextMenuStrip;
@@ -548,6 +534,20 @@
             this.toolTip.SetToolTip(this.buttonBrowseBrush2, "Browse the brushes in bundle 2.");
             this.buttonBrowseBrush2.UseVisualStyleBackColor = false;
             this.buttonBrowseBrush2.Click += new System.EventHandler(this.OnBrowseBrush2Click);
+            // 
+            // labelBundleBrush2
+            // 
+            this.labelBundleBrush2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelBundleBrush2.AutoSize = true;
+            this.labelBundleBrush2.BackColor = System.Drawing.SystemColors.Control;
+            this.labelBundleBrush2.Location = new System.Drawing.Point(3, 46);
+            this.labelBundleBrush2.Name = "labelBundleBrush2";
+            this.labelBundleBrush2.Size = new System.Drawing.Size(217, 46);
+            this.labelBundleBrush2.TabIndex = 3;
+            this.labelBundleBrush2.Text = "Bundle Brush 2:";
+            this.labelBundleBrush2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.labelBundleBrush2, "A brush in bundle 2.");
             // 
             // flowLayoutCheckBoxes
             // 
@@ -714,7 +714,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
-            this.Text = "Ktita Brush Info";
+            this.Text = "Krita Brush Info";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.tableLayoutPanelTop.ResumeLayout(false);
             this.tableLayoutPanelTop.PerformLayout();
